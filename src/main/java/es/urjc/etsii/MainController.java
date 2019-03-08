@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Controlador para arrancar el front-end.
  *
- * @author J. M. Colmenar
+ * @authors Miguel Sierra y Rubén Domínguez
  */
 @Controller
 public class MainController {

@@ -3,7 +3,11 @@ package es.urjc.etsii;
 
 import javax.persistence.*;
 import java.util.List;
-
+/**
+ * Entidad Servicio.
+ *
+ * @authors Miguel Sierra y Rubén Domínguez
+ */
 @Entity
 public class Servicio {
 

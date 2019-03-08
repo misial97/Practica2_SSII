@@ -9,7 +9,8 @@ import java.util.List;
 /**
  * Repositorio generador de API REST HATEOAS: solicitudes
  *
- * @author J. M. Colmenar
+ * @authors Miguel Sierra y Rubén Domínguez
+ *
  */
 @RepositoryRestResource(collectionResourceRel = "solicitudes", path = "solicitudes")
 public interface SolicitudRestRepository extends CrudRepository<Solicitud, Integer> {

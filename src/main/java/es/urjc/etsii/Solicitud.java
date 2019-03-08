@@ -1,7 +1,11 @@
 package es.urjc.etsii;
 
 import javax.persistence.*;
-
+/**
+ * Entidad Solicitud.
+ *
+ * @authors Miguel Sierra y Rubén Domínguez
+ */
 @Entity
 public class Solicitud {
 

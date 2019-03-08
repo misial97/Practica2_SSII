@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * Clase principal.
  *
- * @author J. M. Colmenar
+ * @authors Miguel Sierra y Rubén Domínguez
  */
 @SpringBootApplication
 public class App {

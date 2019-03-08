@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>es.urjc.etsii</groupId>
-    <artifactId>spring-data-rest-onetomany</artifactId>
+    <artifactId>practica2-SSII</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>spring-data-rest-onetomany</name>
+    <name>practica2-SSII</name>
     <url>http://maven.apache.org</url>
 
     <properties>

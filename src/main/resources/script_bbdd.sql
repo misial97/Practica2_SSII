@@ -1,7 +1,8 @@
 -- phpMyAdmin SQL Dump
 -- version 4.8.4
 -- https://www.phpmyadmin.net/
---
+-- Script BBDD
+-- @authors Miguel Sierra y Rubén Domínguez
 -- Servidor: 127.0.0.1
 -- Tiempo de generación: 02-03-2019 a las 17:42:20
 -- Versión del servidor: 10.1.37-MariaDB

@@ -5,7 +5,11 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 
-
+/**
+ * Entidad Usuario.
+ *
+ * @authors Miguel Sierra y Rubén Domínguez
+ */
 /* Al anotar una clase con @Entity se indica a JPA que se trata de un objeto que tendrá
    su tabla equivalente en la base de datos. */
 
