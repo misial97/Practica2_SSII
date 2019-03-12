@@ -1,79 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- Front -->
-    <!-- @authors Miguel Sierra y Rubén Domínguez-->
     <meta charset="utf-8"/>
     <title>Ejemplo consumo REST JSON</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script language="JavaScript">
-        // Función para obtener una película a partir de un ID (índice de la lista en memoria)
-        function getUsuarioById() {
-            var id = $('#iduser').val();
+        function getPeliById() {
+            var id = $('#idpeli').val();
             $.ajax({
-                url: "http://localhost:8080/usuarios/"+id
+                url: "http://localhost:8080/peliculas/"+id
             }).then(function(data) {
-                $('.user-name').append(data.nombre);
-                $('.user-apell').append(data.apellidos);
-                $('.user-email').append(data.email);
-                $('.user-content').append(data.perfil);
+                $('.peli-id').append(data.titulo);
+                $('.peli-content').append(data.imdb);
             });
         }
 
-        function getServicioById() {
-            var id = $('#idservice').val();
-            $.ajax({
-                url: "http://localhost:8080/servicios/"+id
-            }).then(function(data) {
-                $('.serv-name').append(data.name);
-                $('.serv-cate').append(data.category);
-                $('.serv-descr').append(data.description);
-
-            });
-            $.ajax({
-                url : "http://localhost:8080/servicios/"+id+"/usuario"
-            }).then(function (dataUser) {
-                $('.serv-Nameprof').append(dataUser.nombre);
-                $('.serv-Apellprof').append(dataUser.apellidos);
-            });
-        }
-
-        function getSolicitudById() {
-            var id = $('#idsol').val();
-            $.ajax({
-                url: "http://localhost:8080/solicitudes/"+id
-            }).then(function(data) {
-                $('.sol-date').append(data.fechaSolicitud);
-                $('.sol-estado').append(data.estado);
-
-            });
-            $.ajax({
-                url : "http://localhost:8080/solicitudes/"+id+"/usuario"
-            }).then(function (dataUser) {
-                $('.sol-Nameuser').append(dataUser.nombre);
-                $('.sol-Apelluser').append(dataUser.apellidos);
-            });
-            $.ajax({
-                url : "http://localhost:8080/solicitudes/"+id+"/servicio"
-            }).then(function (dataService) {
-                $('.sol-Nameserv').append(dataService.name);
-                $('.sol-Catserv').append(dataService.category);
-            });
-        }
-
-        function getServicioByName() {
-            var name = $('#ser-form').val();
-            $.ajax({
-                url: "http://localhost:8080/servicios/search/findByNameContains?name=" + name
-            }).then(function(data) {
-                $.each(data._embedded.servicios, function (index, value) {
-                    $('.ser-nombre').append(value['name']);
-                    $('.ser-cat').append(value['category']);
-                });
-            });
-        }
-
-        /*// Función para obtener todas las peliculas
+        // Función para obtener todas las peliculas
         function getPeliculas() {
             // Llamada para obtener JSON con peliculas
             $.ajax({
@@ -132,111 +74,69 @@
         }
 
         // Función para obtener peli por titulo
-        function getPelisByTitulo() {
+        function getServiciosByName() {
             var titulo = $('#titulo-form').val();
             $.ajax({
-                url: "http://localhost:8080/peliculas/search/findByTitulo?titulo="+titulo
+                url: "http://localhost:8080/servicios/search/findByName?name="+titulo
             }).then(function(data) {
-                $.each(data._embedded.peliculas, function (index, value) {
-                    $('.peli-id').append(value['titulo']);
-                    $('.peli-content').append(value['imdb']);
+                $.each(data._embedded.servicios[0].name , function (index, value) {
+                    $('.peli-id').append(value);
+                    //$('.peli-content').append(value['description']);
                 });
             });
-        }*/
+        }
 
     </script>
 
 </head>
 <body>
-    <div id="consultaUser">
-        <h2>Consulta un usuario por id</h2>
-        <form action="javascript:getUsuarioById();">
-            Identificador del usuario a cargar:&nbsp;<input id='iduser' type='text'/>
+    <div id="uno">
+        <h2>Consulta una peli por id</h2>
+        <form action="javascript:getServiciosByName();">
+            Identificador de la pel&iacute;cula a cargar:&nbsp;<input id='idpeli' type='text'/>
             <input type="submit"/>
         </form>
-
-        <p class="user-name">Nombre : </p>
-        <p class="user-apell">Apellidos : </p>
-        <p class="user-email">Email : </p>
-        <p class="user-content">Perfil : </p>
-     </div>
-
-    <div id="consultaService">
-        <h2>Consulta un servicio por id</h2>
-        <form action="javascript:getServicioById();">
-            Identificador del usuario a cargar:&nbsp;<input id='idservice' type='text'/>
+        <h2>Consulta una peli por t&iacute;tulo</h2>
+        <form action="javascript:getPelisByTitulo();">
+            T&iacute;tulo de la pel&iacute;cula a cargar:&nbsp;<input id='titulo-form' type='text'/>
             <input type="submit"/>
         </form>
-
-        <p class="serv-name">Servicio : </p>
-        <p class="serv-cate">Categoría : </p>
-        <p class="serv-descr">Descripción:  </p>
-        <h2>Profesional del servicio</h2>
-        <p class="serv-Nameprof">Nombre : </p>
-        <p class="serv-Apellprof">Apellidos : </p>
+        <p class="peli-id">El identificador es : </p>
+        <p class="peli-content">El enlace es : </p>
     </div>
 
-    <div id="consultaSolicitud">
-        <h2>Consulta una solicitud por id</h2>
-            <form action="javascript:getSolicitudById();">
-            Identificador del usuario a cargar:&nbsp;<input id='idsol' type='text'/>
-            <input type="submit"/>
-        </form>
+    <br/>
 
-        <p class="sol-estado">Estado : </p>
-        <p class="sol-date">Fecha solicitud : </p>
-        <h2>Usuario creador solicitud</h2>
-        <p class="sol-Nameuser">Nombre : </p>
-        <p class="sol-Apelluser">Apellidos : </p>
-        <h2>Servicio que solicita</h2>
-        <p class="sol-Nameuser">Nombre : </p>
-        <p class="sol-Catserv">Categoría : </p>
+    <div id="todos">
+        <h2>Consulta todas las pelis</h2>
+        <p><a href="javascript:getPeliculas();">Cargar todas las peliculas y directores</a></p>
+        <table>
+            <thead>
+                <tr><td>T&iacute;tulo</td><td>IMDB</td><td>Director</td></tr>
+            </thead>
+            <tbody id="result">
+            </tbody>
+        </table>
     </div>
 
-    <div id="servicioPorNombre">
-        <h2>Consulta un servicio por id</h2>
-        <form action="javascript:getServicioByName();">
-           Nombre del servicio a buscar:&nbsp;<input id='ser-form' type='text'/>
+    <br/>
+
+    <div id="introducir">
+        <h2>Nueva peli</h2>
+        <form id="nuevapeli" action="javascript:addPeli();">
+            Titulo:&nbsp;<input name="titulo" id="titulo" type="text"/>
+            IMDB:&nbsp;<input name="imdb" id="imdb" type="text"/>
+            ID de director:&nbsp;<input name="director" id="director" type="text"/>
             <input type="submit"/>
         </form>
-
-        <p class="ser-nombre">Servicio : </p>
-        <p class="ser-cat">Categoría : </p>
-
     </div>
 
-    <!--
-     <div id="todos">
-         <h2>Consulta todas las pelis</h2>
-         <p><a href="javascript:getPeliculas();">Cargar todas las peliculas y directores</a></p>
-         <table>
-             <thead>
-                 <tr><td>T&iacute;tulo</td><td>IMDB</td><td>Director</td></tr>
-             </thead>
-             <tbody id="result">
-             </tbody>
-         </table>
-     </div>
-
-     <br/>
-
-     <div id="introducir">
-         <h2>Nueva peli</h2>
-         <form id="nuevapeli" action="javascript:addPeli();">
-             Titulo:&nbsp;<input name="titulo" id="titulo" type="text"/>
-             IMDB:&nbsp;<input name="imdb" id="imdb" type="text"/>
-             ID de director:&nbsp;<input name="director" id="director" type="text"/>
-             <input type="submit"/>
-         </form>
-     </div>
-
-     <div id="borrar">
-         <h2>Borrar director</h2>
-         <form id="borraDirec" action="javascript:borrarDirector();">
-             ID de director:&nbsp;<input name="director" id="directorId" type="text"/> //id se usa para sacar el valor de ese campo
-             <input type="submit"/>
-         </form>
-     </div>
-     -->
- </body>
- </html>
+    <div id="borrar">
+        <h2>Borrar director</h2>
+        <form id="borraDirec" action="javascript:borrarDirector();">
+            ID de director:&nbsp;<input name="director" id="directorId" type="text"/> //id se usa para sacar el valor de ese campo
+            <input type="submit"/>
+        </form>
+    </div>
+</body>
+</html>
