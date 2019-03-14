@@ -61,15 +61,17 @@
                 $('.sol-Catserv').append(dataService.category);
             });
         }
-
+        //https://stackoverflow.com/questions/10401034/create-a-label-using-jquery-on-the-fly
         function getServicioByName() {
             var name = $('#ser-form').val();
+            $('.ser-n').text('');
+            $('.ser-c').text('');
             $.ajax({
                 url: "http://localhost:8080/servicios/search/findByNameContains?name=" + name
             }).then(function(data) {
                 $.each(data._embedded.servicios, function (index, value) {
-                    $('.ser-n').text(value['name']);
-                    $('.ser-c').text(value['category']);
+                    $('.ser-n').append(value['name']);
+                    $('.ser-c').append(value['category']);
                 });
             });
 
