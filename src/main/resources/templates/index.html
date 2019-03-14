@@ -68,10 +68,11 @@
                 url: "http://localhost:8080/servicios/search/findByNameContains?name=" + name
             }).then(function(data) {
                 $.each(data._embedded.servicios, function (index, value) {
-                    $('.ser-nombre').append(value['name']);
-                    $('.ser-cat').append(value['category']);
+                    $('.ser-n').text(value['name']);
+                    $('.ser-c').text(value['category']);
                 });
             });
+
         }
 
         /*// Función para obtener todas las peliculas
@@ -202,7 +203,9 @@
         </form>
 
         <p class="ser-nombre">Servicio : </p>
+        <p id="aux" class="ser-n" text=""></p>
         <p class="ser-cat">Categoría : </p>
+        <p id="aux1" class="ser-c" text=""></p>
 
     </div>
 
