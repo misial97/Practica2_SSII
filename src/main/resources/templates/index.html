@@ -70,8 +70,8 @@
                 url: "http://localhost:8080/servicios/search/findByNameContains?name=" + name
             }).then(function(data) {
                 $.each(data._embedded.servicios, function (index, value) {
-                    $('.ser-n').append(value['name']);
-                    $('.ser-c').append(value['category']);
+                    $('.ser-n').append(value['name']+"<br/>");
+                    $('.ser-c').append(value['category']+"<br/>");
                 });
             });
 
