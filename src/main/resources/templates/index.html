@@ -64,16 +64,36 @@
         //https://stackoverflow.com/questions/10401034/create-a-label-using-jquery-on-the-fly
         function getServicioByName() {
             var name = $('#ser-form').val();
-            $('.ser-n').text('');
+            var btn;
+           // $('.ser-n').text('');
             $('.ser-c').text('');
             $.ajax({
                 url: "http://localhost:8080/servicios/search/findByNameContains?name=" + name
             }).then(function(data) {
                 $.each(data._embedded.servicios, function (index, value) {
-                    $('.ser-n').append(value['name']+"<br/>");
-                    $('.ser-c').append(value['category']+"<br/>");
+                    btn = crearElemento('input',value['name'],'clase','__',value['name'],value['name'],value['_links']['self']['href']);
+                    salto = crearElemento('br','__','__','__','__','__','__');
+                    var body = document.getElementById('aux1');
+                    body.appendChild(btn);
+                    btn.after(salto);
+                    btn.setAttribute('type','button');
+                    aux= value['_links']['self']['href'];
+                    btn.setAttribute('onClick','window.location='+'\''+ aux+'\'');
+
+                    // $('.ser-n').append(value['name']+"<br/>");
+                    //$('.ser-c').append(value['category']+"<br/>");
                 });
             });
+            function crearElemento(elemento, identificador, clase, texto, valor, ref) {
+                var item = document.createElement(elemento);
+                if (identificador !=='__'){ item.id = identificador; }
+                if (clase !=='__') { item.className = clase; }
+                if (texto !=='__') { item.innerText = texto; }
+                if (valor !== '__') { item.value = valor; }
+                if (ref !=='__') { item.href = ref; }
+                return item;
+            }
+
 
         }
 
@@ -152,7 +172,8 @@
 
 </head>
 <body>
-    <div id="consultaUser">
+<!--
+<div id="consultaUser">
         <h2>Consulta un usuario por id</h2>
         <form action="javascript:getUsuarioById();">
             Identificador del usuario a cargar:&nbsp;<input id='iduser' type='text'/>
@@ -196,6 +217,7 @@
         <p class="sol-Nameuser">Nombre : </p>
         <p class="sol-Catserv">Categoría : </p>
     </div>
+    -->
 
     <div id="servicioPorNombre">
         <h2>Consulta un servicio por id</h2>
@@ -203,10 +225,11 @@
            Nombre del servicio a buscar:&nbsp;<input id='ser-form' type='text'/>
             <input type="submit"/>
         </form>
-
+        <!--
         <p class="ser-nombre">Servicio : </p>
         <p id="aux" class="ser-n" text=""></p>
         <p class="ser-cat">Categoría : </p>
+        -->
         <p id="aux1" class="ser-c" text=""></p>
 
     </div>
