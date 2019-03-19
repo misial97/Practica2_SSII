@@ -4,10 +4,10 @@
     <!-- Front -->
     <!-- @authors Miguel Sierra y Rubén Domínguez-->
     <meta charset="utf-8"/>
-    <!--sida-->
-    <title>Ejemplo consumo REST JSON</title>
+    <title>Funcionalidades Practica2</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script language="JavaScript">
+        var idSer;
         // Función para obtener una película a partir de un ID (índice de la lista en memoria)
         function getUsuarioById() {
             var id = $('#iduser').val();
@@ -136,10 +136,10 @@
             //(añadir condiciones para el borrado o hacer que muestre sus servicios y que elija cual borrar)
         }
         function muestraServicio() {
-            var id = $('#id').val();
+            idSer = $('#id').val();
             var atri;
             $.ajax({
-                url: "http://localhost:8080/servicios/"+id
+                url: "http://localhost:8080/servicios/"+idSer
             }).then(function(data) {
                 atri = document.getElementById('modifName');
                 atri.setAttribute('value', data.name);
@@ -166,7 +166,7 @@
             //formData['usuario'] = 'http://localhost:8080/servicios/' + $('#id').val();
             $.ajax({
                 type: "PUT",
-                url: 'http://localhost:8080/servicios/'+ $('#id').val(),
+                url: 'http://localhost:8080/servicios/'+ idSer,
                 dataType: 'json',
                 async: false,
                 // El objeto hay que convertirlo a texto
