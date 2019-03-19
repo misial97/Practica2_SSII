@@ -135,8 +135,45 @@
             //hay que tener en cuenta que solo podrán borrar los servicios del propio usuario
             //(añadir condiciones para el borrado o hacer que muestre sus servicios y que elija cual borrar)
         }
-
-        //function modifServicio(){}
+        function muestraServicio() {
+            var id = $('#id').val();
+            var atri;
+            $.ajax({
+                url: "http://localhost:8080/servicios/"+id
+            }).then(function(data) {
+                atri = document.getElementById('modifName');
+                atri.setAttribute('value', data.name);
+                atri = document.getElementById('modifCat');
+                atri.setAttribute('value', data.category);
+                atri = document.getElementById('modifDes');
+                atri.setAttribute('value', data.description);
+                atri = document.getElementById('modifHours');
+                atri.setAttribute('value', data.hours);
+                atri = document.getElementById('modifPrice');
+                atri.setAttribute('value', data.price);
+            });
+        }
+        function modifServicio() {
+            // Primero se captan los datos del formulario y pasan a un objeto.
+            var formData = {};
+            formData['name'] = $('#modifName').val();
+            formData['category'] = $('#modifCat').val();
+            formData['description'] = $('#modifDes').val();
+            formData['hours'] = $('#modifHours').val();
+            formData['price'] = $('#modifPrice').val();
+            //formData['idService'] = $('#id').val();
+            // Para el usuario hay que enviar la URI completa al objeto existente:
+            //formData['usuario'] = 'http://localhost:8080/servicios/' + $('#id').val();
+            $.ajax({
+                type: "PUT",
+                url: 'http://localhost:8080/servicios/'+ $('#id').val(),
+                dataType: 'json',
+                async: false,
+                // El objeto hay que convertirlo a texto
+                data: JSON.stringify(formData),
+                contentType: 'application/json'
+            });
+        }
 
         /*// Función para obtener todas las peliculas
         function getPeliculas() {
@@ -295,26 +332,28 @@
         <input type="submit"/>
     </form>
 </div>
-<!--https://www.lawebdelprogramador.com/foros/HTML/1436261-valor-por-defecto-en-un-formulario-html.html
+<!--https://www.lawebdelprogramador.com/foros/HTML/1436261-valor-por-defecto-en-un-formulario-html.html-->
 <div id="modificar">
  <h2>Modifica servicio</h2>
-  ID Servicio:&nbsp;<input name="id" id="id" type="text"/>
+    <form id="mostrarServ" action="javascript:muestraServicio();">
+    ID Servicio:&nbsp;<input name="id" id="id" type="text"/>
   <input type="submit"/>
+    </form>
   <br></br><br></br>
  <form id="modifserv" action="javascript:modifServicio();">
-     Nombre:&nbsp;<input name="modifName" id="modifName" type="text"/>
-     Categoría:&nbsp;<input name="modifCat" id="modifCat" type="text"/>
-     Descripción:&nbsp;<input name="modifDes" id="modifDes" type="text"/>
+     Nombre:&nbsp;<input name="modifName" id="modifName" type="text" value=""/>
+     Categoría:&nbsp;<input name="modifCat" id="modifCat" type="text" value=""/>
+     Descripción:&nbsp;<input name="modifDes" id="modifDes" type="text" value=""/>
      <br></br><br></br>
-     Horas:&nbsp;<input name="modifHours" id="modifHours" type="text"/>
-     Precio:&nbsp;<input name="modifPrice" id="modifPrice" type="text"/>
-     ID Usuario:&nbsp;<input name="modifUser" id="modifUser" type="text"/>
+     Horas:&nbsp;<input name="modifHours" id="modifHours" type="text" value=""/>
+     Precio:&nbsp;<input name="modifPrice" id="modifPrice" type="text" value=""/>
+     <!--ID Usuario:&nbsp;<input name="modifUser" id="modifUser" type="text"/>-->
      <br></br><br></br>
      <input type="submit"/>
  </form>
 </div>
 
-
+<!--
   <div id="todos">
       <h2>Consulta todas las pelis</h2>
       <p><a href="javascript:getPeliculas();">Cargar todas las peliculas y directores</a></p>
