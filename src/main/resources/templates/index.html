@@ -93,9 +93,50 @@
                 if (ref !=='__') { item.href = ref; }
                 return item;
             }
-
-
         }
+        function addServicio() {
+            // Primero se captan los datos del formulario y pasan a un objeto.
+            var formData = {};
+            /*    private String name, category, description;
+            private int hours, price;
+            private Usuario usuario;*/
+            formData['name'] = $('#addName').val();
+            formData['category'] = $('#addCat').val();
+            formData['description'] = $('#addDes').val();
+            formData['hours'] = $('#addHours').val();
+            formData['price'] = $('#addPrice').val();
+            // Para el usuario hay que enviar la URI completa al objeto existente:
+            formData['usuario'] = 'http://localhost:8080/usuarios/'+$('#addUser').val();
+            $.ajax({
+                type: "POST",
+                url: 'http://localhost:8080/servicios/',
+                dataType: 'json',
+                async: false,
+                // El objeto hay que convertirlo a texto
+                data: JSON.stringify(formData),
+                contentType: 'application/json'
+            });
+            //habría que mostrar el id del servicio creado por pantalla para que el usuario lo sepa
+        }
+        function borrarServicio() {
+            var formData = {};
+            formData['id'] = 'http://localhost:8080/servicios/'+$('#servicioId').val();
+            // Para el director hay que enviar la URI completa al objeto existente:
+            $.ajax({
+                type: "DELETE",
+                url: 'http://localhost:8080/servicios/'+$('#servicioId').val(),
+                dataType: 'json',
+                async: false,
+                // El objeto hay que convertirlo a texto
+                data: JSON.stringify(formData),
+                contentType: 'application/json'
+            });
+
+            //hay que tener en cuenta que solo podrán borrar los servicios del propio usuario
+            //(añadir condiciones para el borrado o hacer que muestre sus servicios y que elija cual borrar)
+        }
+
+        //function modifServicio(){}
 
         /*// Función para obtener todas las peliculas
         function getPeliculas() {
@@ -233,39 +274,78 @@
         <p id="aux1" class="ser-c" text=""></p>
 
     </div>
+<div id="introducir">
+    <h2>Nuevo servicio</h2>
+    <form id="nuevoserv" action="javascript:addServicio();">
+        Nombre:&nbsp;<input name="addName" id="addName" type="text"/>
+        Categoría:&nbsp;<input name="addCat" id="addCat" type="text"/>
+        Descripción:&nbsp;<input name="addDes" id="addDes" type="text"/>
+        <br></br><br></br>
+        Horas:&nbsp;<input name="addHours" id="addHours" type="text"/>
+        Precio:&nbsp;<input name="addPrice" id="addPrice" type="text"/>
+        ID Usuario:&nbsp;<input name="addUser" id="addUser" type="text"/>
+        <br></br><br></br>
+        <input type="submit"/>
+    </form>
+</div>
+<div id="borrar">
+    <h2>Borrar servicio</h2>
+    <form id="borraServ" action="javascript:borrarServicio();">
+        ID del servicio:&nbsp;<input name="servicio" id="servicioId" type="text"/>
+        <input type="submit"/>
+    </form>
+</div>
+<!--https://www.lawebdelprogramador.com/foros/HTML/1436261-valor-por-defecto-en-un-formulario-html.html
+<div id="modificar">
+ <h2>Modifica servicio</h2>
+  ID Servicio:&nbsp;<input name="id" id="id" type="text"/>
+  <input type="submit"/>
+  <br></br><br></br>
+ <form id="modifserv" action="javascript:modifServicio();">
+     Nombre:&nbsp;<input name="modifName" id="modifName" type="text"/>
+     Categoría:&nbsp;<input name="modifCat" id="modifCat" type="text"/>
+     Descripción:&nbsp;<input name="modifDes" id="modifDes" type="text"/>
+     <br></br><br></br>
+     Horas:&nbsp;<input name="modifHours" id="modifHours" type="text"/>
+     Precio:&nbsp;<input name="modifPrice" id="modifPrice" type="text"/>
+     ID Usuario:&nbsp;<input name="modifUser" id="modifUser" type="text"/>
+     <br></br><br></br>
+     <input type="submit"/>
+ </form>
+</div>
 
-    <!--
-     <div id="todos">
-         <h2>Consulta todas las pelis</h2>
-         <p><a href="javascript:getPeliculas();">Cargar todas las peliculas y directores</a></p>
-         <table>
-             <thead>
-                 <tr><td>T&iacute;tulo</td><td>IMDB</td><td>Director</td></tr>
-             </thead>
-             <tbody id="result">
-             </tbody>
-         </table>
-     </div>
 
-     <br/>
+  <div id="todos">
+      <h2>Consulta todas las pelis</h2>
+      <p><a href="javascript:getPeliculas();">Cargar todas las peliculas y directores</a></p>
+      <table>
+          <thead>
+              <tr><td>T&iacute;tulo</td><td>IMDB</td><td>Director</td></tr>
+          </thead>
+          <tbody id="result">
+          </tbody>
+      </table>
+  </div>
 
-     <div id="introducir">
-         <h2>Nueva peli</h2>
-         <form id="nuevapeli" action="javascript:addPeli();">
-             Titulo:&nbsp;<input name="titulo" id="titulo" type="text"/>
-             IMDB:&nbsp;<input name="imdb" id="imdb" type="text"/>
-             ID de director:&nbsp;<input name="director" id="director" type="text"/>
-             <input type="submit"/>
-         </form>
-     </div>
+  <br/>
 
-     <div id="borrar">
-         <h2>Borrar director</h2>
-         <form id="borraDirec" action="javascript:borrarDirector();">
-             ID de director:&nbsp;<input name="director" id="directorId" type="text"/> //id se usa para sacar el valor de ese campo
-             <input type="submit"/>
-         </form>
-     </div>
-     -->
+  <div id="introducir">
+      <h2>Nueva peli</h2>
+      <form id="nuevapeli" action="javascript:addPeli();">
+          Titulo:&nbsp;<input name="titulo" id="titulo" type="text"/>
+          IMDB:&nbsp;<input name="imdb" id="imdb" type="text"/>
+          ID de director:&nbsp;<input name="director" id="director" type="text"/>
+          <input type="submit"/>
+      </form>
+  </div>
+
+  <div id="borrar">
+      <h2>Borrar director</h2>
+      <form id="borraDirec" action="javascript:borrarDirector();">
+          ID de director:&nbsp;<input name="director" id="directorId" type="text"/> //id se usa para sacar el valor de ese campo
+          <input type="submit"/>
+      </form>
+  </div>
+  -->
  </body>
  </html>
