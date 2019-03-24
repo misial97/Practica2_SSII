@@ -9,8 +9,8 @@
     <link rel="shortcut icon" href="/images/autonomo.us-logo-notype-122x122.png" type="image/x-icon">
     <meta name="description" content="Web Builder Description">
     <title>Inicio</title>
-    <link rel="stylesheet" href="/web/assets/mobirise-icons/mobirise-icons.css">
-    <link rel="stylesheet" href="/tether/tether.min.css">
+    <link rel="stylesheet" href="../web/assets/mobirise-icons/mobirise-icons.css">
+    <link rel="stylesheet" href="../tether/tether.min.css">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap-grid.min.css">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap-reboot.min.css">
@@ -29,17 +29,19 @@
     <script language="JavaScript">
         function compruebaLogin() {
             var email = $('#email').val();
+            console.log(email);
             var pass =  $('#passw').val();
-            var btn;
+            console.log(pass);
+            var btn= document.getElementById("btnlogin");
             $.ajax({
                 url: "http://localhost:8080/usuarios/search/findByEmail?email=" + email
             }).then(function(data) {
-                if((data.pass)==(pass)){
+                console.log(data._embedded.usuarios[0].pass);
+                if((data._embedded.usuarios[0].pass)===(pass)){
                     console.log("TODO OK --> LOGIN");
-                    if((data.perfil).equals("CUSTOMER")) {
-                        console.error("TODO OK --> CUSTOMER");
-                        btn = document.getElementById('loginClient');
-                        btn.setAttribute('href', "buscar.html");
+                    if((data._embedded.usuarios[0].perfil)===("COSTUMER")) {
+                        console.log("TODO OK --> CUSTOMER");
+                        location.href ="http://localhost:8080/buscar";
                     }else if((data.perfil)==("PROFESSIONAL")){
                         console.error("TODO OK --> PROFESSIONAL");
                         btn = document.getElementById('loginClient');
@@ -47,6 +49,9 @@
                     }else{
                         console.error("ERROR LOG IN");
                     }
+                }
+                else{
+                    console.log("error");
                 }
             });
         }
@@ -92,13 +97,12 @@
                       <div class="mbr-section-btn align-left">
                           <form id="login" action="javascript:compruebaLogin();">
                                 <input class="form-control" type="text" name="text" placeholder="E-mail" data-form-field="mailito" required="" id="email"/>
-                                <p><br></br></p>
+                                <p></br></br></p>
                                 <input class="form-control" type="text" name="text" placeholder="Contraseña" data-form-field="pass" required="" id="passw"/>
-                                <p><br></br></p>
+                                </br></br>
                               <!--<a class="btn btn-primary display-4" id="loginProf" href="">Log-in Autonomo</a>-->
-                             <input type="submit"/>
-                           <a  class="btn btn-primary display-4" id="loginClient" href ="" value="Log-in"/>
-                             <!--<a id="loginClient" href="" hidden="true" >Log in</a>-->
+                             <input id="btnlogin" type="submit" class="btn btn-primary display-4"  value="Hola buenos dias" />
+
                           </form>
 
 

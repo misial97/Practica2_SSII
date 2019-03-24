@@ -17,4 +17,8 @@ public class MainController {
     public String inicio(Map<String, Object> model) {
         return "index";
     }
+    @RequestMapping("/buscar")
+    public String login(Map<String, Object> model) {
+        return "buscar";
+    }
 }

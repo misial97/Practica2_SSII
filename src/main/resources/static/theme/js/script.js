@@ -133,10 +133,11 @@
 
     var isSupportViewportUnits = (function() {
         // modernizr implementation
-        var $elem = $('<div style="height: 50vh; position: absolute; top: -1000px; left: -1000px;">').appendTo('body');
+        var $elem = $('<div style="height: 50vh; position: absolute; top: -1000px; left: -1000px;">');
+        $elem.appendTo(document.getElementById("body"));
         var elem = $elem[0];
         var height = parseInt(window.innerHeight / 2, 10);
-        var compStyle = parseInt((window.getComputedStyle ? getComputedStyle(elem, null) : elem.currentStyle)['height'], 10);
+        var compStyle = parseInt((window.getComputedStyle ? getComputedStyle($elem[0], " ") : elem.currentStyle)['height'], 10);
         $elem.remove();
         return compStyle == height;
     }());
@@ -342,7 +343,7 @@
                     // youtube
                     if (parsedUrl && /youtube/g.test(parsedUrl[3])) {
                         var previewURL = 'http' + ('https:' === location.protocol ? 's' : '') + ':';
-                        previewURL += '//img.youtube.com/vi/' + parsedUrl[6] + '/maxresdefault.jpg';
+                        previewURL += '//img.youtube.com/vi/' + parsedUrl[6] + '/ckground3.jpg';
 
                         $('<img>').on('load', function() {
                             if (120 === (this.naturalWidth || this.width)) {
@@ -350,7 +351,7 @@
                                 var file = this.src.split('/').pop();
 
                                 switch (file) {
-                                    case 'maxresdefault.jpg':
+                                    case 'ckground3.jpg':
                                         this.src = this.src.replace(file, 'sddefault.jpg');
                                         break;
                                     case 'sddefault.jpg':
@@ -1002,4 +1003,4 @@
         }
     }
 })(jQuery);
-!function(){try{document.getElementsByClassName("engine")[0].getElementsByTagName("a")[0].removeAttribute("rel")}catch(b){}if(!document.getElementById("top-1")){var a=document.createElement("section");a.id="top-1";a.className="engine";a.innerHTML='<a href="https://mobirise.ws">Mobirise Website Builder</a> v4.9.2';document.body.insertBefore(a,document.body.childNodes[0])}}();
+ //!function(){try{document.getElementsByClassName("engine")[0].getElementsByTagName("a")[0].removeAttribute("rel")}catch(b){}if(!document.getElementById("top-1")){var a=document.createElement("section");a.id="top-1";a.className="engine";a.innerHTML='<a href="https://mobirise.ws">Mobirise Website Builder</a> v4.9.2';document.body.insertBefore(a,document.body.childNodes[0])}}();
