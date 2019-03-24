@@ -19,6 +19,6 @@ public class MainController {
     }
     @RequestMapping("/buscar")
     public String login(Map<String, Object> model) {
-        return "buscar";
+        return "listaBusqueda";
     }
 }
