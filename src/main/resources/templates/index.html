@@ -1,390 +1,192 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- Front -->
-    <!-- @authors Miguel Sierra y Rubén Domínguez-->
-    <meta charset="utf-8"/>
-    <title>Funcionalidades Practica2</title>
+  <!-- Site made with Mobirise Website Builder v4.9.2, https://mobirise.com -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Mobirise v4.9.2, mobirise.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <link rel="shortcut icon" href="/images/autonomo.us-logo-notype-122x122.png" type="image/x-icon">
+    <meta name="description" content="Web Builder Description">
+    <title>Inicio</title>
+    <link rel="stylesheet" href="/web/assets/mobirise-icons/mobirise-icons.css">
+    <link rel="stylesheet" href="/tether/tether.min.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap-reboot.min.css">
+    <link rel="stylesheet" href="/dropdown/css/style.css">
+    <link rel="stylesheet" href="/theme/css/style.css">
+    <link rel="stylesheet" href="/mobirise/css/mbr-additional.css" type="text/css">
+    <script src="/web/assets/jquery/jquery.min.js"></script>
+    <script src="/popper/popper.min.js"></script>
+    <script src="/tether/tether.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/smoothscroll/smooth-scroll.js"></script>
+    <script src="/dropdown/js/script.min.js"></script>
+    <script src="/touchswipe/jquery.touch-swipe.min.js"></script>
+    <script src="/theme/js/script.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script language="JavaScript">
-        var idSer;
-        // Función para obtener una película a partir de un ID (índice de la lista en memoria)
-        function getUsuarioById() {
-            var id = $('#iduser').val();
-            $.ajax({
-                url: "http://localhost:8080/usuarios/"+id
-            }).then(function(data) {
-                $('.user-name').append(data.nombre);
-                $('.user-apell').append(data.apellidos);
-                $('.user-email').append(data.email);
-                $('.user-content').append(data.perfil);
-            });
-        }
-
-        function getServicioById() {
-            var id = $('#idservice').val();
-            $.ajax({
-                url: "http://localhost:8080/servicios/"+id
-            }).then(function(data) {
-                $('.serv-name').append(data.name);
-                $('.serv-cate').append(data.category);
-                $('.serv-descr').append(data.description);
-
-            });
-            $.ajax({
-                url : "http://localhost:8080/servicios/"+id+"/usuario"
-            }).then(function (dataUser) {
-                $('.serv-Nameprof').append(dataUser.nombre);
-                $('.serv-Apellprof').append(dataUser.apellidos);
-            });
-        }
-
-        function getSolicitudById() {
-            var id = $('#idsol').val();
-            $.ajax({
-                url: "http://localhost:8080/solicitudes/"+id
-            }).then(function(data) {
-                $('.sol-date').append(data.fechaSolicitud);
-                $('.sol-estado').append(data.estado);
-
-            });
-            $.ajax({
-                url : "http://localhost:8080/solicitudes/"+id+"/usuario"
-            }).then(function (dataUser) {
-                $('.sol-Nameuser').append(dataUser.nombre);
-                $('.sol-Apelluser').append(dataUser.apellidos);
-            });
-            $.ajax({
-                url : "http://localhost:8080/solicitudes/"+id+"/servicio"
-            }).then(function (dataService) {
-                $('.sol-Nameserv').append(dataService.name);
-                $('.sol-Catserv').append(dataService.category);
-            });
-        }
-        //https://stackoverflow.com/questions/10401034/create-a-label-using-jquery-on-the-fly
-        function getServicioByName() {
-            var name = $('#ser-form').val();
+        function compruebaLogin() {
+            var email = $('#email').val();
+            var pass =  $('#passw').val();
             var btn;
-           // $('.ser-n').text('');
-            $('.ser-c').text('');
             $.ajax({
-                url: "http://localhost:8080/servicios/search/findByNameContains?name=" + name
+                url: "http://localhost:8080/usuarios/search/findByEmail?email=" + email
             }).then(function(data) {
-                $.each(data._embedded.servicios, function (index, value) {
-                    btn = crearElemento('input',value['name'],'clase','__',value['name'],value['name'],value['_links']['self']['href']);
-                    salto = crearElemento('br','__','__','__','__','__','__');
-                    var body = document.getElementById('aux1');
-                    body.appendChild(btn);
-                    btn.after(salto);
-                    btn.setAttribute('type','button');
-                    aux= value['_links']['self']['href'];
-                    btn.setAttribute('onClick','window.location='+'\''+ aux+'\'');
-
-                    // $('.ser-n').append(value['name']+"<br/>");
-                    //$('.ser-c').append(value['category']+"<br/>");
-                });
-            });
-            function crearElemento(elemento, identificador, clase, texto, valor, ref) {
-                var item = document.createElement(elemento);
-                if (identificador !=='__'){ item.id = identificador; }
-                if (clase !=='__') { item.className = clase; }
-                if (texto !=='__') { item.innerText = texto; }
-                if (valor !== '__') { item.value = valor; }
-                if (ref !=='__') { item.href = ref; }
-                return item;
-            }
-        }
-        function addServicio() {
-            // Primero se captan los datos del formulario y pasan a un objeto.
-            var formData = {};
-            /*    private String name, category, description;
-            private int hours, price;
-            private Usuario usuario;*/
-            formData['name'] = $('#addName').val();
-            formData['category'] = $('#addCat').val();
-            formData['description'] = $('#addDes').val();
-            formData['hours'] = $('#addHours').val();
-            formData['price'] = $('#addPrice').val();
-            // Para el usuario hay que enviar la URI completa al objeto existente:
-            formData['usuario'] = 'http://localhost:8080/usuarios/'+$('#addUser').val();
-            $.ajax({
-                type: "POST",
-                url: 'http://localhost:8080/servicios/',
-                dataType: 'json',
-                async: false,
-                // El objeto hay que convertirlo a texto
-                data: JSON.stringify(formData),
-                contentType: 'application/json'
-            });
-            //habría que mostrar el id del servicio creado por pantalla para que el usuario lo sepa
-        }
-        function borrarServicio() {
-            var formData = {};
-            formData['id'] = 'http://localhost:8080/servicios/'+$('#servicioId').val();
-            // Para el director hay que enviar la URI completa al objeto existente:
-            $.ajax({
-                type: "DELETE",
-                url: 'http://localhost:8080/servicios/'+$('#servicioId').val(),
-                dataType: 'json',
-                async: false,
-                // El objeto hay que convertirlo a texto
-                data: JSON.stringify(formData),
-                contentType: 'application/json'
-            });
-
-            //hay que tener en cuenta que solo podrán borrar los servicios del propio usuario
-            //(añadir condiciones para el borrado o hacer que muestre sus servicios y que elija cual borrar)
-        }
-        function muestraServicio() {
-            idSer = $('#id').val();
-            var atri;
-            $.ajax({
-                url: "http://localhost:8080/servicios/"+idSer
-            }).then(function(data) {
-                atri = document.getElementById('modifName');
-                atri.setAttribute('value', data.name);
-                atri = document.getElementById('modifCat');
-                atri.setAttribute('value', data.category);
-                atri = document.getElementById('modifDes');
-                atri.setAttribute('value', data.description);
-                atri = document.getElementById('modifHours');
-                atri.setAttribute('value', data.hours);
-                atri = document.getElementById('modifPrice');
-                atri.setAttribute('value', data.price);
+                if((data.pass)==(pass)){
+                    console.log("TODO OK --> LOGIN");
+                    if((data.perfil).equals("CUSTOMER")) {
+                        console.error("TODO OK --> CUSTOMER");
+                        btn = document.getElementById('loginClient');
+                        btn.setAttribute('href', "buscar.html");
+                    }else if((data.perfil)==("PROFESSIONAL")){
+                        console.error("TODO OK --> PROFESSIONAL");
+                        btn = document.getElementById('loginClient');
+                        btn.setAttribute('onclick', "cliente_1.html");
+                    }else{
+                        console.error("ERROR LOG IN");
+                    }
+                }
             });
         }
-        function modifServicio() {
-            // Primero se captan los datos del formulario y pasan a un objeto.
-            var formData = {};
-            formData['name'] = $('#modifName').val();
-            formData['category'] = $('#modifCat').val();
-            formData['description'] = $('#modifDes').val();
-            formData['hours'] = $('#modifHours').val();
-            formData['price'] = $('#modifPrice').val();
-            //formData['idService'] = $('#id').val();
-            // Para el usuario hay que enviar la URI completa al objeto existente:
-            //formData['usuario'] = 'http://localhost:8080/servicios/' + $('#id').val();
-            $.ajax({
-                type: "PUT",
-                url: 'http://localhost:8080/servicios/'+ idSer,
-                dataType: 'json',
-                async: false,
-                // El objeto hay que convertirlo a texto
-                data: JSON.stringify(formData),
-                contentType: 'application/json'
-            });
-        }
-
-        /*// Función para obtener todas las peliculas
-        function getPeliculas() {
-            // Llamada para obtener JSON con peliculas
-            $.ajax({
-                url: "http://localhost:8080/peliculas/"
-            }).then(function(data) {
-                // Procesado de las películas recibidas
-                $('#result').empty();
-                // Cada pelicula corresponde a una iteración del $.each siguiente
-                $.each(data._embedded.peliculas, function (index, value) {
-                    // Para cada pelicula se obtienen los datos de su director con otra llamada.
-                    // La dirección de la llamada al director está en la propia película: _links.director.href
-                    $.ajax({
-                        url: value['_links']['director']['href']
-                    }).then(function(dataDirector) {
-                        // Se incluyen los datos de peli y director en la tabla de resultados.
-                        $('#result').append('<tr><td>'+value['titulo']+'</td><td>'+value['imdb']+'</td>' +
-                            '<td>'+dataDirector['nombre']+'&nbsp;'+dataDirector['apellidos']+'</td></tr>');
-                    });
-                });
-            });
-        }
-
-        // Función para añadir una película a través de la API REST
-        function addPeli() {
-            // Primero se captan los datos del formulario y pasan a un objeto.
-            var formData = {};
-            formData['titulo'] = $('#titulo').val();
-            formData['imdb'] = $('#imdb').val();
-            // Para el director hay que enviar la URI completa al objeto existente:
-            formData['director'] = 'http://localhost:8080/directores/'+$('#director').val();
-            $.ajax({
-                type: "POST",
-                url: 'http://localhost:8080/peliculas/',
-                dataType: 'json',
-                async: false,
-                // El objeto hay que convertirlo a texto
-                data: JSON.stringify(formData),
-                contentType: 'application/json'
-            });
-        }
-
-        // Función para añadir una película a través de la API REST
-        function borrarDirector() {
-            var formData = {};
-            formData['id'] = 'http://localhost:8080/directores/'+$('#directorId').val();
-            // Para el director hay que enviar la URI completa al objeto existente:
-            $.ajax({
-                type: "DELETE",
-                url: 'http://localhost:8080/directores/'+$('#directorId').val(),
-                dataType: 'json',
-                async: false,
-                // El objeto hay que convertirlo a texto
-                data: JSON.stringify(formData),
-                contentType: 'application/json'
-            });
-        }
-
-        // Función para obtener peli por titulo
-        function getPelisByTitulo() {
-            var titulo = $('#titulo-form').val();
-            $.ajax({
-                url: "http://localhost:8080/peliculas/search/findByTitulo?titulo="+titulo
-            }).then(function(data) {
-                $.each(data._embedded.peliculas, function (index, value) {
-                    $('.peli-id').append(value['titulo']);
-                    $('.peli-content').append(value['imdb']);
-                });
-            });
-        }*/
-
     </script>
-
 </head>
+
 <body>
-<!--
-<div id="consultaUser">
-        <h2>Consulta un usuario por id</h2>
-        <form action="javascript:getUsuarioById();">
-            Identificador del usuario a cargar:&nbsp;<input id='iduser' type='text'/>
-            <input type="submit"/>
-        </form>
+  <section class="menu cid-qTkzRZLJNu" once="menu" id="menu1-0">
+    <nav class="navbar navbar-expand beta-menu navbar-dropdown align-items-center navbar-fixed-top navbar-toggleable-sm">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </button>
+        <div class="menu-logo">
+            <div class="navbar-brand">
+                <span class="navbar-logo">
+                    <a href="https://mobirise.co">
+                         <img src="/images/autonomo.us-logo-notype-122x122.png" alt="Mobirise" title="" style="height: 4.8rem;"/>
+                    </a>
+                </span>
+                <span class="navbar-caption-wrap"><a class="navbar-caption text-white display-4" href="index.html">
+                        AUTONOMOS NETWORK</a></span>
+            </div>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        </div>
+    </nav>
+</section>
 
-        <p class="user-name">Nombre : </p>
-        <p class="user-apell">Apellidos : </p>
-        <p class="user-email">Email : </p>
-        <p class="user-content">Perfil : </p>
-     </div>
+<section class="engine"><a href="https://mobirise.info/b">how to create your own site</a></section><section class="cid-qTkA127IK8 mbr-fullscreen mbr-parallax-background" id="header2-1">
 
-    <div id="consultaService">
-        <h2>Consulta un servicio por id</h2>
-        <form action="javascript:getServicioById();">
-            Identificador del usuario a cargar:&nbsp;<input id='idservice' type='text'/>
-            <input type="submit"/>
-        </form>
-
-        <p class="serv-name">Servicio : </p>
-        <p class="serv-cate">Categoría : </p>
-        <p class="serv-descr">Descripción:  </p>
-        <h2>Profesional del servicio</h2>
-        <p class="serv-Nameprof">Nombre : </p>
-        <p class="serv-Apellprof">Apellidos : </p>
+    <div class="mbr-overlay" style="opacity: 0.8; background-color: rgb(0, 0, 0);">
     </div>
 
-    <div id="consultaSolicitud">
-        <h2>Consulta una solicitud por id</h2>
-            <form action="javascript:getSolicitudById();">
-            Identificador del usuario a cargar:&nbsp;<input id='idsol' type='text'/>
-            <input type="submit"/>
-        </form>
+        <div class="container">
 
-        <p class="sol-estado">Estado : </p>
-        <p class="sol-date">Fecha solicitud : </p>
-        <h2>Usuario creador solicitud</h2>
-        <p class="sol-Nameuser">Nombre : </p>
-        <p class="sol-Apelluser">Apellidos : </p>
-        <h2>Servicio que solicita</h2>
-        <p class="sol-Nameuser">Nombre : </p>
-        <p class="sol-Catserv">Categoría : </p>
+                <div class="media-container-column mbr-white">
+                    <h1 class="mbr-section-title align-left mbr-bold pb-3 mbr-fonts-style display-1"><p><br></br>Bienvenido a Autonomos Network</p></h1>
+                      <div class="mbr-section-btn align-left">
+                          <form id="login" action="javascript:compruebaLogin();">
+                                <input class="form-control" type="text" name="text" placeholder="E-mail" data-form-field="mailito" required="" id="email"/>
+                                <p><br></br></p>
+                                <input class="form-control" type="text" name="text" placeholder="Contraseña" data-form-field="pass" required="" id="passw"/>
+                                <p><br></br></p>
+                              <!--<a class="btn btn-primary display-4" id="loginProf" href="">Log-in Autonomo</a>-->
+                             <input type="submit"/>
+                           <a  class="btn btn-primary display-4" id="loginClient" href ="" value="Log-in"/>
+                             <!--<a id="loginClient" href="" hidden="true" >Log in</a>-->
+                          </form>
+
+
+                      </div>
+                </div>
+
+        </div>
+
+</section>
+
+<section class="cid-rhFKZ6QvKs" id="footer1-7">
+    <div class="container">
+        <div class="media-container-row content text-white">
+            <div class="col-12 col-md-3">
+                <div class="media-wrap">
+                    <a href="https://mobirise.co/">
+                        <img src="/images/autonomo.us-logo-notype-122x122.png" alt="Mobirise" title=""/>
+                    </a>
+                </div>
+            </div>
+            <div class="col-12 col-md-3 mbr-fonts-style display-7">
+                <h5 class="pb-3">
+                    Dirección</h5>
+                <p class="mbr-text">
+                    Calle Tulipán S/n<br></br>Móstoles, Madrid</p>
+            </div>
+            <div class="col-12 col-md-3 mbr-fonts-style display-7">
+                <h5 class="pb-3">
+                    Contacto</h5>
+                <p class="mbr-text">
+                    Email: support@autnetwork.com
+                    <br></br>Teléfono: 900 252 155 254<br></br><br></br></p>
+            </div>
+            <div class="col-12 col-md-3 mbr-fonts-style display-7">
+                <h5 class="pb-3">
+                    Enlaces</h5>
+                <p class="mbr-text"><a href="https://www.urjc.es/" class="text-success">Términos y condiciones de uso</a><br></br><a href="https://www.urjc.es/" class="text-success">Red de Autonomos</a><br></br><a href="https://www.urjc.es/" class="text-success">FAQs</a></p>
+            </div>
+        </div>
+        <div class="footer-lower">
+            <div class="media-container-row">
+                <div class="col-sm-12">
+                    <hr></hr>
+                </div>
+            </div>
+            <div class="media-container-row mbr-white">
+                <div class="col-sm-6 copyright">
+                    <p class="mbr-text mbr-fonts-style display-7">
+                        © Copyright 2019 Autonomos Network - All Rights Reserved
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <div class="social-list align-right">
+                        <div class="soc-item">
+                            <a href="https://twitter.com/mobirise" target="_blank">
+                                <span class="socicon-twitter socicon mbr-iconfont mbr-iconfont-social"></span>
+                            </a>
+                        </div>
+                        <div class="soc-item">
+                            <a href="https://www.facebook.com/pages/Mobirise/1616226671953247" target="_blank">
+                                <span class="socicon-facebook socicon mbr-iconfont mbr-iconfont-social"></span>
+                            </a>
+                        </div>
+                        <div class="soc-item">
+                            <a href="https://www.youtube.com/c/mobirise" target="_blank">
+                                <span class="socicon-youtube socicon mbr-iconfont mbr-iconfont-social"></span>
+                            </a>
+                        </div>
+                        <div class="soc-item">
+                            <a href="https://instagram.com/mobirise" target="_blank">
+                                <span class="socicon-instagram socicon mbr-iconfont mbr-iconfont-social"></span>
+                            </a>
+                        </div>
+                        <div class="soc-item">
+                            <a href="https://plus.google.com/u/0/+Mobirise" target="_blank">
+                                <span class="socicon-googleplus socicon mbr-iconfont mbr-iconfont-social"></span>
+                            </a>
+                        </div>
+                        <div class="soc-item">
+                            <a href="https://www.behance.net/Mobirise" target="_blank">
+                                <span class="socicon-behance socicon mbr-iconfont mbr-iconfont-social"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    -->
-
-    <div id="servicioPorNombre">
-        <h2>Consulta un servicio por id</h2>
-        <form action="javascript:getServicioByName();">
-           Nombre del servicio a buscar:&nbsp;<input id='ser-form' type='text'/>
-            <input type="submit"/>
-        </form>
-        <!--
-        <p class="ser-nombre">Servicio : </p>
-        <p id="aux" class="ser-n" text=""></p>
-        <p class="ser-cat">Categoría : </p>
-        -->
-        <p id="aux1" class="ser-c" text=""></p>
-
-    </div>
-<div id="introducir">
-    <h2>Nuevo servicio</h2>
-    <form id="nuevoserv" action="javascript:addServicio();">
-        Nombre:&nbsp;<input name="addName" id="addName" type="text"/>
-        Categoría:&nbsp;<input name="addCat" id="addCat" type="text"/>
-        Descripción:&nbsp;<input name="addDes" id="addDes" type="text"/>
-        <br></br><br></br>
-        Horas:&nbsp;<input name="addHours" id="addHours" type="text"/>
-        Precio:&nbsp;<input name="addPrice" id="addPrice" type="text"/>
-        ID Usuario:&nbsp;<input name="addUser" id="addUser" type="text"/>
-        <br></br><br></br>
-        <input type="submit"/>
-    </form>
-</div>
-<div id="borrar">
-    <h2>Borrar servicio</h2>
-    <form id="borraServ" action="javascript:borrarServicio();">
-        ID del servicio:&nbsp;<input name="servicio" id="servicioId" type="text"/>
-        <input type="submit"/>
-    </form>
-</div>
-<!--https://www.lawebdelprogramador.com/foros/HTML/1436261-valor-por-defecto-en-un-formulario-html.html-->
-<div id="modificar">
- <h2>Modifica servicio</h2>
-    <form id="mostrarServ" action="javascript:muestraServicio();">
-    ID Servicio:&nbsp;<input name="id" id="id" type="text"/>
-  <input type="submit"/>
-    </form>
-  <br></br><br></br>
- <form id="modifserv" action="javascript:modifServicio();">
-     Nombre:&nbsp;<input name="modifName" id="modifName" type="text" value=""/>
-     Categoría:&nbsp;<input name="modifCat" id="modifCat" type="text" value=""/>
-     Descripción:&nbsp;<input name="modifDes" id="modifDes" type="text" value=""/>
-     <br></br><br></br>
-     Horas:&nbsp;<input name="modifHours" id="modifHours" type="text" value=""/>
-     Precio:&nbsp;<input name="modifPrice" id="modifPrice" type="text" value=""/>
-     <!--ID Usuario:&nbsp;<input name="modifUser" id="modifUser" type="text"/>-->
-     <br></br><br></br>
-     <input type="submit"/>
- </form>
-</div>
-
-<!--
-  <div id="todos">
-      <h2>Consulta todas las pelis</h2>
-      <p><a href="javascript:getPeliculas();">Cargar todas las peliculas y directores</a></p>
-      <table>
-          <thead>
-              <tr><td>T&iacute;tulo</td><td>IMDB</td><td>Director</td></tr>
-          </thead>
-          <tbody id="result">
-          </tbody>
-      </table>
-  </div>
-
-  <br/>
-
-  <div id="introducir">
-      <h2>Nueva peli</h2>
-      <form id="nuevapeli" action="javascript:addPeli();">
-          Titulo:&nbsp;<input name="titulo" id="titulo" type="text"/>
-          IMDB:&nbsp;<input name="imdb" id="imdb" type="text"/>
-          ID de director:&nbsp;<input name="director" id="director" type="text"/>
-          <input type="submit"/>
-      </form>
-  </div>
-
-  <div id="borrar">
-      <h2>Borrar director</h2>
-      <form id="borraDirec" action="javascript:borrarDirector();">
-          ID de director:&nbsp;<input name="director" id="directorId" type="text"/> //id se usa para sacar el valor de ese campo
-          <input type="submit"/>
-      </form>
-  </div>
-  -->
- </body>
- </html>
+</section>
+</body>
+</html>
