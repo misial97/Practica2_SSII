@@ -29,7 +29,6 @@
     <script language="JavaScript">
         function compruebaLogin() {
             var email = $('#email').val();
-            localStorage.setItem('usuario',email);
             console.log(email);
             var pass =  $('#passw').val();
             console.log(pass);
@@ -37,7 +36,9 @@
             $.ajax({
                 url: "http://localhost:8080/usuarios/search/findByEmail?email=" + email
             }).then(function(data) {
-                console.log(data._embedded.usuarios[0].pass);
+             var name_aux =data._embedded.usuarios[0].nombre;
+             console.log(name_aux);
+                localStorage.setItem('usuario', name_aux);
                 if((data._embedded.usuarios[0].pass)===(pass)){
                     console.log("TODO OK --> LOGIN");
                     if((data._embedded.usuarios[0].perfil)===("COSTUMER")) {

@@ -19,5 +19,6 @@ public interface SolicitudRestRepository extends CrudRepository<Solicitud, Integ
 
     // Declaración de método para buscar solicitudes por estado.
     List<Solicitud> findByEstado(@Param("estado") String estado);
+    List<Solicitud> findAllBy();
 
 }

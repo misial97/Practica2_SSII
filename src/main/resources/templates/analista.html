@@ -18,7 +18,55 @@
   <link rel="stylesheet" href="/dropdown/css/style.css">
   <link rel="stylesheet" href="/theme/css/style.css">
   <link rel="stylesheet" href="/mobirise/css/mbr-additional.css" type="text/css">
+    <script language="JavaScript">
 
+        function serviciosNoUsados() {
+            var solicitudes = new Array();
+           var func1= $.ajax({
+                url: "http://localhost:8080/solicitudes/search/findAllBy"
+            }).then(function (data1) {
+                $.each(data1._embedded.solicitudes, function (index, value) {
+                    sida = false;
+                    var aux = value['_links']['servicio']['href'];
+                    $.ajax({
+                        url: aux
+                    }).then(function (data) {
+                        solicitudes.push(data.name);
+                        sida = true;
+
+
+                    });
+                });
+            });
+           // if (sida = true) {
+
+            $.when(func1).done($.ajax({
+                    url: "http://localhost:8080/servicios/search/findAllByOrderByNameAsc"
+                }).then(function (data2) {
+                    $.each(data2._embedded.servicios, function (index, value) {
+                        var noApto = true;
+                        var x = 0;
+                        console.log(solicitudes);
+                        console.log(solicitudes[0]);
+                        console.log(solicitudes.length);
+                        for (x = 0; x < solicitudes.length; x++) {
+                            console.log(value['name']);
+                            console.log(solicitudes[x]);
+                            if (value['name'] === solicitudes[x]) {
+                                noApto = false;
+                            }
+                        }
+                        if (!noApto) {
+                            console.log(value['name']);
+                        }
+                    });
+                }));
+           // }
+
+        }
+
+
+    </script>
 
 
         </head>
@@ -69,8 +117,14 @@
         <div class="media-container-column mbr-white">
             <h1 id="welcome" class="mbr-section-title align-left mbr-bold pb-3 mbr-fonts-style display-1"><p id="w"></p></h1>
               <div class="mbr-section-btn align-left">
-                
-                <a class="btn btn-primary display-4" href="listaPeticiones.html">XXXXXXXXXXXXXX</a>
+
+                  <a class="btn btn-primary display-4" style='width:300px; height:50px'  onclick="serviciosNoUsados()">Servicios no demandados</a>
+
+                  <a class="btn btn-primary display-4" style='width:300px; height:50px' href="listaPeticiones.html">Servicios mas demandados</a>
+                  <
+                  <a class="btn btn-primary display-4" style='width:300px; height:50px' href="listaPeticiones.html">Servicios con mas ingresos</a>
+
+                  <a class="btn btn-primary display-4" style='width:300px; height:50px'  href="listaPeticiones.html">Profesionales mas demandados</a>
 				<br><br><br>
 				<br><br><br>
 				<br><br><br>
@@ -176,8 +230,8 @@
 </section>
 
   <script language="JavaScript">
-      alert(localStorage.getItem('usuario'));
-      document.getElementById('w').innerText = "Bienvenid@";
+      var usuario= localStorage.getItem('usuario');
+      document.getElementById('w').innerText = "Bienvenid@ "+ usuario;
   </script>
 
   <script src="/web/assets/jquery/jquery.min.js"></script>
