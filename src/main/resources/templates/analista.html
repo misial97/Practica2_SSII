@@ -23,12 +23,14 @@
         function serviciosNoUsados() {
             var solicitudes = new Array();
            var func1= $.ajax({
+               async: false,
                 url: "http://localhost:8080/solicitudes/search/findAllBy"
             }).then(function (data1) {
                 $.each(data1._embedded.solicitudes, function (index, value) {
                     sida = false;
                     var aux = value['_links']['servicio']['href'];
                     $.ajax({
+                        async: false,
                         url: aux
                     }).then(function (data) {
                         solicitudes.push(data.name);
@@ -40,7 +42,8 @@
             });
            // if (sida = true) {
 
-            $.when(func1).done($.ajax({
+            $.ajax({
+                async: false,
                     url: "http://localhost:8080/servicios/search/findAllByOrderByNameAsc"
                 }).then(function (data2) {
                     $.each(data2._embedded.servicios, function (index, value) {
@@ -60,7 +63,7 @@
                             console.log(value['name']);
                         }
                     });
-                }));
+                });
            // }
 
         }
