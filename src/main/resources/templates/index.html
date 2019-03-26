@@ -29,6 +29,7 @@
     <script language="JavaScript">
         function compruebaLogin() {
             var email = $('#email').val();
+            localStorage.setItem('usuario',email);
             console.log(email);
             var pass =  $('#passw').val();
             console.log(pass);

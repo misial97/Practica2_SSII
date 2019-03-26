@@ -18,10 +18,10 @@
   <link rel="stylesheet" href="/dropdown/css/style.css">
   <link rel="stylesheet" href="/theme/css/style.css">
   <link rel="stylesheet" href="/mobirise/css/mbr-additional.css" type="text/css">
-  
-  
-  
-</head>
+
+
+
+        </head>
 <body>
   <!--Cabecera pagina-->
   <section class="menu cid-rhFKKj91K6" once="menu" id="menu1-6">
@@ -67,7 +67,7 @@
 
     <div class="container">
         <div class="media-container-column mbr-white">
-            <h1 class="mbr-section-title align-left mbr-bold pb-3 mbr-fonts-style display-1"><p>Bienvenid@ ANALISTA</p></h1>
+            <h1 id="welcome" class="mbr-section-title align-left mbr-bold pb-3 mbr-fonts-style display-1"><p id="w"></p></h1>
               <div class="mbr-section-btn align-left">
                 
                 <a class="btn btn-primary display-4" href="listaPeticiones.html">XXXXXXXXXXXXXX</a>
@@ -175,6 +175,10 @@
     </div>
 </section>
 
+  <script language="JavaScript">
+      alert(localStorage.getItem('usuario'));
+      document.getElementById('w').innerText = "Bienvenid@";
+  </script>
 
   <script src="/web/assets/jquery/jquery.min.js"></script>
   <script src="/popper/popper.min.js"></script>
