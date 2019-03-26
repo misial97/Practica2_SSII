@@ -23,9 +23,10 @@
       //var urlServicio = "";
 
 
-      function ocultaMuestra(urlServicio){
-          console.log("estoy en ocultaMuestra" + Object.values(urlServicio));
-          getServicio(urlServicio);
+      function ocultaMuestra(urlServicioSelected){
+            alert(urlServicioSelected);
+          //console.log("estoy en ocultaMuestra");
+          getServicio(urlServicioSelected);
 
           var divBusq1 = document.getElementById('divBus1');
           var divBusq2 = document.getElementById('muestraLista');
@@ -40,27 +41,21 @@
           seccionMuestraServicio.setAttribute('style','display:block');
 
       }
-
-
-    function getServicio(urlServicio) {
-        console.log("estoy en getServicioById");
-
-        //var id = $('#idservice').val();
+      function getServicio(urlServicio) {
+          //idSer = $('#id').val();
+          var atri;
           $.ajax({
               url: urlServicio
           }).then(function(data) {
-              $('.serviceSelectedTitle').append(data.name);
-              //$('.').append(data.category);
-              $('.serviceDescription').append(data.description);
-              $('.servicePrice').append(data.price + "€");
-              $('.serviceDuration').append(data.hours + "horas");
+              atri = document.getElementById('serviceSelectedTitle');
+              atri.setAttribute('value', data.name);
 
-          });
-          $.ajax({
-              url : urlServicio + "/usuario"
-          }).then(function (dataUser) {
-              $('.serviceProf').append(dataUser.nombre + " " + dataUser.apellidos);
-              //$('.serviceProf').append(dataUser.apellidos);
+              atri = document.getElementById('serviceDescription');
+              atri.setAttribute('value', data.description);
+              atri = document.getElementById('serviceDuration');
+              atri.setAttribute('value', data.hours);
+              atri = document.getElementById('servicePrice');
+              atri.setAttribute('value', data.price);
           });
       }
       function getServicioByName() {
@@ -83,13 +78,13 @@
                   var body = document.getElementById('aux1');
                   body.appendChild(nombre);
                   description = crearElemento('div', value['description'], 'mbr-content-title mbr-fonts-style display-4', value['description'], value['description'], value['_links']['self']['href'],'__','__','__');
-                  var linkService = value['_links']['self']['href'];
-                  link = crearElemento('a', 'linkJSON_' + value['name'], '__', 'Ir al servicio JSON', '__' ,value['_links']['self']['href'],'__','__','__' ); //link al json
-                  link2 = crearElemento('a', 'link_' + value['name'], linkService, 'Ir al servicio', '__' , 'javascript:ocultaMuestra("http://localhost:8080/servicios/1");','__','__','__'); //link a la template servicio
-                  //HAY QUE LOGRAR PONER LA URL DEL SERVICIO QUE CLICKAS PARA QUE CARGUE LA PAGINA SUS DATOS ---> PASANDOSELO A OCULTAMUESTRA, QUE ESTE A SU VEZ LLAMA A GETSERVICIO
+                  //link = crearElemento('a', 'linkJSON_' + value['name'], '__', 'Ir al servicio JSON', '__' ,value['_links']['self']['href'],'__','__','__' ); //link al json
+                  link2 = crearElemento('a', value['_links']['self']['href'], '__', 'Ir al servicio', '__' , '__','__','__','__'); //link a la template servicio
+                  link2.setAttribute('onclick','ocultaMuestra(this.id)');
+                  link2.setAttribute('style','color:rgba(0,151,255,1);');
+                  //FALTA MOSTRAR LOS VALORES DE LA LLAMADA, NO SE PQ NO SALDRAN, LA URL YA SE MANDA CORRECTAMENTE (this.id) poniendo como id la urlSSS
                   body.appendChild(description);
-                  body.appendChild(link);
-                  body.appendChild(espacio);
+                  //body.appendChild(link);
                   body.appendChild(link2);
                   body.appendChild(espacio);
               });
@@ -197,6 +192,7 @@
       <div class="container">
           <div class="media-container-row pt-5">
               <div class="accordion-content">
+                  <form id="showService" action = "javascript:getServicio();">
                   <h2 id="serviceSelectedTitle" class="mbr-section-title align-center pb-3 mbr-fonts-style display-2">
 
                       <!--Has elegido el Servicio:--> </h2>
@@ -269,7 +265,8 @@
                       </div>
 
 
-                  </div>
+                    </div>
+                  </form>
               </div>
               <div class="mbr-figure" style="width: 109%;">
                   <img src="/images/peluChiqui.jpg" alt="Mobirise" title="">
