@@ -18,12 +18,57 @@
   <link rel="stylesheet" href="/dropdown/css/style.css"/>
   <link rel="stylesheet" href="/theme/css/style.css"/>
   <link rel="stylesheet" href="/mobirise/css/mbr-additional.css" type="text/css"/>
-  <script language="JavaScript">
+
+    <script language="JavaScript">
+      //var urlServicio = "";
+
+
+      function ocultaMuestra(urlServicio){
+          console.log("estoy en ocultaMuestra" + Object.values(urlServicio));
+          getServicio(urlServicio);
+
+          var divBusq1 = document.getElementById('divBus1');
+          var divBusq2 = document.getElementById('muestraLista');
+          var divBusq3 = document.getElementById('botonSig');
+          var seccionMuestraServicio = document.getElementById('sectionShowService');
+
+
+          divBusq1.setAttribute('style','display:none');
+          divBusq2.setAttribute('style','display:none');
+          divBusq3.setAttribute('style','display:none');
+
+          seccionMuestraServicio.setAttribute('style','display:block');
+
+      }
+
+
+    function getServicio(urlServicio) {
+        console.log("estoy en getServicioById");
+
+        //var id = $('#idservice').val();
+          $.ajax({
+              url: urlServicio
+          }).then(function(data) {
+              $('.serviceSelectedTitle').append(data.name);
+              //$('.').append(data.category);
+              $('.serviceDescription').append(data.description);
+              $('.servicePrice').append(data.price + "€");
+              $('.serviceDuration').append(data.hours + "horas");
+
+          });
+          $.ajax({
+              url : urlServicio + "/usuario"
+          }).then(function (dataUser) {
+              $('.serviceProf').append(dataUser.nombre + " " + dataUser.apellidos);
+              //$('.serviceProf').append(dataUser.apellidos);
+          });
+      }
       function getServicioByName() {
           var name = $('#service-form3-8').val();
           var nombre;
           var description;
           var espacio;
+          var link, link2, oculto;
           //Para vaciar el contenido y que no sumen hasta el infinito
           document.getElementById('aux1').innerText="";
 
@@ -32,38 +77,46 @@
           }).then(function (data) {
               $.each(data._embedded.servicios, function (index, value) {
                   //Se crea el div con el nombre
-                  nombre = crearElemento('div', value['name'], 'mbr-content-title mbr-bold mbr-fonts-style display-7', value['name'], value['name'], value['_links']['self']['href']);
+                  nombre = crearElemento('div', value['name'], 'mbr-content-title mbr-bold mbr-fonts-style display-7', value['name'], value['name'], value['_links']['self']['href'],'__','__' ,'__');
                   //Meter espacio
-                  espacio= crearElemento('br', '__', '__', '__', '__', '__');
+                  espacio= crearElemento('br', '__', '__', '__', '__', '__','__','__','__' );
                   var body = document.getElementById('aux1');
                   body.appendChild(nombre);
-                  description = crearElemento('div', value['description'], 'mbr-content-title mbr-fonts-style display-4', value['description'], value['description'], value['_links']['self']['href']);
+                  description = crearElemento('div', value['description'], 'mbr-content-title mbr-fonts-style display-4', value['description'], value['description'], value['_links']['self']['href'],'__','__','__');
+                  var linkService = value['_links']['self']['href'];
+                  link = crearElemento('a', 'linkJSON_' + value['name'], '__', 'Ir al servicio JSON', '__' ,value['_links']['self']['href'],'__','__','__' ); //link al json
+                  link2 = crearElemento('a', 'link_' + value['name'], linkService, 'Ir al servicio', '__' , 'javascript:ocultaMuestra("http://localhost:8080/servicios/1");','__','__','__'); //link a la template servicio
+                  //HAY QUE LOGRAR PONER LA URL DEL SERVICIO QUE CLICKAS PARA QUE CARGUE LA PAGINA SUS DATOS ---> PASANDOSELO A OCULTAMUESTRA, QUE ESTE A SU VEZ LLAMA A GETSERVICIO
                   body.appendChild(description);
+                  body.appendChild(link);
                   body.appendChild(espacio);
-
+                  body.appendChild(link2);
+                  body.appendChild(espacio);
               });
           });
       }
-      function crearElemento(elemento, identificador, clase, texto, valor, ref) {
+
+      function crearElemento(elemento, identificador, clase, texto, valor, ref, click, action, type) {
       var item = document.createElement(elemento);
       if (identificador !=='__'){ item.id = identificador; }
       if (clase !=='__') { item.className = clase; }
       if (texto !=='__') { item.innerText = texto; }
       if (valor !== '__') { item.value = valor; }
       if (ref !=='__') { item.href = ref; }
+      if (click !=='__') { item.onclick = click; }
+      if (action !=='__') { item.action = action; }
+      if (type !=='__') { item.type = type; }
       return item;
       }
 
-  </script>>
-  
-  
+  </script>
+
 </head>
 <body>
+
+
   <!--Cabecera pagina-->
   <section class="menu cid-rhFKKj91K6" once="menu" id="menu1-6">
-
-    
-
     <nav class="navbar navbar-expand beta-menu navbar-dropdown align-items-center navbar-fixed-top navbar-toggleable-sm">
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <div class="hamburger">
@@ -91,15 +144,12 @@
     </nav>
 </section>
 
-<!--Insertar codigo cuerpo de aqui hasta-->
 
-<section class="counters3 counters cid-ri3GCVuT85" id="counters3-3">
-
+<section class="counters3 counters cid-ri3GCVuT85">
     <div class="container pt-4 mt-2">
 		<br><br><br>
 		<br><br><br>
-
-        <div class="container">
+        <div id="divBus1" class="container" style="display:block">
             <div class="media-container-column mbr-white">
                 <h1 class="mbr-section-title align-left mbr-bold pb-3 mbr-fonts-style display-1" style="color:gray"><p>Busqueda de Servicio</p></h1>
                 <div class="mbr-section-btn align-left">
@@ -110,12 +160,9 @@
                     <a class="btn btn-primary display-4" type="submit" onclick="javascript:getServicioByName();" >Buscar</a>
                     </form>>
                 </div>
-
             </div>
         </div>
-
-        <div>
-            
+        <div id="muestraLista" style="display:block">
             <div class="cards-block">
                 <div class="cards-container">
                     <div class="card px-3 align-left col-12">
@@ -125,24 +172,111 @@
                                 </h3>
                             </div>
                             <div class="card-text">
-                                <div id="aux1" ></div>
-
-                            </a>
+                                <div id="aux1" >
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
+        <div class="card px-3 align-center" id="botonSig" style="display:block">
+            <br><br><br>
+            <a class="btn btn-primary display-4" href="#">Página siguiente</a>
+            <br><br><br>
+        </div>
     </div>
-	<div class="card px-3 align-center">
-		<br><br><br>
-		<a class="btn btn-primary display-4" href="#">Página siguiente</a>
-		<br><br><br>
-	</div>
 </section>
 
-<!--Aqui-->
+
+<!--seccion oculta hasta que el usuario clika en el link del servicio-->
+<section class="engine" >
+    <a href="https://mobirise.info/k">how to develop your own website</a></section>
+  <section class="accordion2 cid-rhR7gSATS6" id="sectionShowService" style="display:none">
+      <div class="container">
+          <div class="media-container-row pt-5">
+              <div class="accordion-content">
+                  <h2 id="serviceSelectedTitle" class="mbr-section-title align-center pb-3 mbr-fonts-style display-2">
+
+                      <!--Has elegido el Servicio:--> </h2>
+
+                  <div id="bootstrap-accordion_4" class="panel-group accordionStyles accordion pt-5 mt-3" role="tablist" aria-multiselectable="true">
+                      <div class="card">
+                          <div class="card-header" role="tab" id="headingOne">
+                              <a role="button" class="collapsed panel-title text-black" data-toggle="collapse" data-core="" href="#collapse1_4" aria-expanded="false" aria-controls="collapse1">
+                                  <h4 class="mbr-fonts-style display-5">
+                                      <span class="sign mbr-iconfont mbri-arrow-down inactive"></span>Descripción</h4>
+                              </a>
+                          </div>
+                          <div id="collapse1_4" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#bootstrap-accordion_4">
+                              <div class="panel-body p-4">
+                                  <p id="serviceDescription" class="mbr-fonts-style panel-text display-7">
+                                      <!--Peluquería para niños y niñas, para tener unos nenes muy guapos.--></p>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="card">
+                          <div class="card-header" role="tab" id="headingTwo">
+                              <a role="button" class="collapsed panel-title text-black" data-toggle="collapse" data-core="" href="#collapse2_4" aria-expanded="false" aria-controls="collapse2">
+                                  <h4 class="mbr-fonts-style mbr-fonts-style display-5">
+                                      <span class="sign mbr-iconfont mbri-arrow-down inactive"></span>Profesional al cargo</h4>
+                              </a>
+
+                          </div>
+                          <div id="collapse2_4" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingTwo" data-parent="#bootstrap-accordion_4">
+                              <div class="panel-body p-4">
+                                  <p id="serviceProf" class="mbr-fonts-style panel-text display-7">
+                                      <!--Doña Felisa Oliveira--></p>
+                              </div>
+                          </div>
+                      </div>
+                      <!--
+                              <div class="card">
+                                  <div class="card-header" role="tab" id="headingThree">
+                                      <a role="button" class="collapsed panel-title text-black" data-toggle="collapse" data-core="" href="#collapse3_4" aria-expanded="false" aria-controls="collapse3">
+                                          <h4 class="mbr-fonts-style display-5">
+                                              <span class="sign mbr-iconfont mbri-arrow-down inactive"></span>Lugares Disponibles</h4>
+                                      </a>
+                                  </div>
+                                  <div id="collapse3_4" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingThree" data-parent="#bootstrap-accordion_4">
+                                      <div class="panel-body p-4">
+                                          <p class="mbr-fonts-style panel-text display-7">- Villaverde Alto</p>
+                                          <p class="mbr-fonts-style panel-text display-7">- Villaverde Bajo</p>
+                                      </div>
+                                  </div>
+                              </div>
+                      -->
+                      <div class="card">
+                          <div class="card-header" role="tab" id="headingFour">
+                              <a role="button" class="collapsed panel-title text-black" data-toggle="collapse" data-core="" href="#collapse4_4" aria-expanded="false" aria-controls="collapse4">
+                                  <h4 class="mbr-fonts-style display-5">
+                                      <span class="sign mbr-iconfont mbri-arrow-down inactive"></span>Precio del servicio</h4>
+                              </a>
+                          </div>
+                          <div id="collapse4_4" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingFour" data-parent="#bootstrap-accordion_4">
+                              <div class="panel-body p-4">
+                                  <p id="servicePrice" class="mbr-fonts-style panel-text display-7"></p>
+                              </div>
+                          </div>
+                      </div>
+                      <p><br></br><br></br><br></br></p>
+                      <div class="mbr-arrow hidden-sm-down" aria-hidden="true">
+                          <a href="#next">
+                              <i class="mbri-down mbr-iconfont"></i>
+                          </a>
+                      </div>
+
+
+                  </div>
+              </div>
+              <div class="mbr-figure" style="width: 109%;">
+                  <img src="/images/peluChiqui.jpg" alt="Mobirise" title="">
+              </div>
+          </div>
+      </div>
+  </section>
 
 
 <!--Pie de la página-->

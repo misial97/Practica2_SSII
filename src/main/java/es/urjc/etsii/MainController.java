@@ -13,12 +13,24 @@ import java.util.Map;
 @Controller
 public class MainController {
     // Se puede utilizar "/", pero lo dejamos libre para ver lo que envia el RepositoryRestResource
-    @RequestMapping("/front")
-    public String inicio(Map<String, Object> model) {
-        return "index";
-    }
+    @RequestMapping("/login")
+    public String inicio(Map<String, Object> model) { return "index"; }
+
     @RequestMapping("/buscar")
-    public String login(Map<String, Object> model) {
+    public String loginCliente(Map<String, Object> model) {
         return "listaBusqueda";
     }
+
+    @RequestMapping("/profesional")
+    public String loginProfesional(Map<String, Object> model) {
+        return "cliente_1";
+    }
+
+    @RequestMapping("/analista")
+    public String loginAnalista(Map<String, Object> model) { return "analista"; }
+
+    @RequestMapping("/servSel")
+    public String servicioSeleccionado(Map<String, Object> model) { return "servicioSeleccionado"; }
+
+
 }
