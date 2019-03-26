@@ -48,18 +48,15 @@
                 }).then(function (data2) {
                     $.each(data2._embedded.servicios, function (index, value) {
                         var noApto = true;
-                        var x = 0;
-                        console.log(solicitudes);
-                        console.log(solicitudes[0]);
-                        console.log(solicitudes.length);
+
                         for (x = 0; x < solicitudes.length; x++) {
-                            console.log(value['name']);
-                            console.log(solicitudes[x]);
+
+
                             if (value['name'] === solicitudes[x]) {
                                 noApto = false;
                             }
                         }
-                        if (!noApto) {
+                        if (noApto) {
                             console.log(value['name']);
                         }
                     });
