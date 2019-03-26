@@ -26,7 +26,7 @@
       function ocultaMuestra(urlServicioSelected){
             alert(urlServicioSelected);
           //console.log("estoy en ocultaMuestra");
-          getServicio(urlServicioSelected);
+
 
           var divBusq1 = document.getElementById('divBus1');
           var divBusq2 = document.getElementById('muestraLista');
@@ -39,23 +39,21 @@
           divBusq3.setAttribute('style','display:none');
 
           seccionMuestraServicio.setAttribute('style','display:block');
-
+          getServicio(urlServicioSelected);
       }
       function getServicio(urlServicio) {
           //idSer = $('#id').val();
+          alert("PRUEBA 2:" +  urlServicio);
           var atri;
           $.ajax({
               url: urlServicio
           }).then(function(data) {
               atri = document.getElementById('serviceSelectedTitle');
-              atri.setAttribute('value', data.name);
-
+              atri.innerText =  data.name;
               atri = document.getElementById('serviceDescription');
-              atri.setAttribute('value', data.description);
-              atri = document.getElementById('serviceDuration');
-              atri.setAttribute('value', data.hours);
+              atri.innerText = data.description;
               atri = document.getElementById('servicePrice');
-              atri.setAttribute('value', data.price);
+              atri.innerText = data.price + "€";
           });
       }
       function getServicioByName() {
@@ -168,7 +166,6 @@
                             </div>
                             <div class="card-text">
                                 <div id="aux1" >
-                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -193,9 +190,7 @@
           <div class="media-container-row pt-5">
               <div class="accordion-content">
                   <form id="showService" action = "javascript:getServicio();">
-                  <h2 id="serviceSelectedTitle" class="mbr-section-title align-center pb-3 mbr-fonts-style display-2">
-
-                      <!--Has elegido el Servicio:--> </h2>
+                  <h2 id="serviceSelectedTitle" class="mbr-section-title align-center pb-3 mbr-fonts-style display-2"> </h2>
 
                   <div id="bootstrap-accordion_4" class="panel-group accordionStyles accordion pt-5 mt-3" role="tablist" aria-multiselectable="true">
                       <div class="card">
