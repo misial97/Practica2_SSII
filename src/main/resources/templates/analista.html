@@ -20,9 +20,25 @@
   <link rel="stylesheet" href="/mobirise/css/mbr-additional.css" type="text/css">
     <script language="JavaScript">
 
+        function crearElemento(elemento, identificador, clase, texto, valor, ref, click, action, type) {
+            var item = document.createElement(elemento);
+            if (identificador !=='__'){ item.id = identificador; }
+            if (clase !=='__') { item.className = clase; }
+            if (texto !=='__') { item.innerText = texto; }
+            if (valor !== '__') { item.value = valor; }
+            if (ref !=='__') { item.href = ref; }
+            if (click !=='__') { item.onclick = click; }
+            if (action !=='__') { item.action = action; }
+            if (type !=='__') { item.type = type; }
+            return item;
+        }
+
         function serviciosNoUsados() {
+            var apartado = document.getElementById('listaElem');
+            apartado.innerText="";
+
             var solicitudes = new Array();
-           var func1= $.ajax({
+           $.ajax({
                async: false,
                 url: "http://localhost:8080/solicitudes/search/findAllBy"
             }).then(function (data1) {
@@ -34,13 +50,12 @@
                         url: aux
                     }).then(function (data) {
                         solicitudes.push(data.name);
-                        sida = true;
+
 
 
                     });
                 });
             });
-           // if (sida = true) {
 
             $.ajax({
                 async: false,
@@ -57,7 +72,29 @@
                             }
                         }
                         if (noApto) {
-                            console.log(value['name']);
+
+                            var contenedor1= crearElemento('div', value['name'], 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', value['name'], '__','__','__','text' );
+                            var espacio= crearElemento('br', '__', '__', '__', '__', '__','__','__','__' );
+                            var urlName= value['_links']['usuario']['href'];
+                            $.ajax({
+                                async:false,
+                                url: urlName
+                            }).then(function(data3){
+                                var contenedor2= crearElemento('div', data3.nombre+" "+data3.apellidos, 'mbr-content-title mbr-bold mbr-fonts-style display-4', '__', data3.nombre+" "+data3.apellidos, '__','__','__','text' );
+                                contenedor1.setAttribute('style','background-color:#0069d9; color: white');
+                                contenedor2.setAttribute('style','background-color:lightsteelblue; color: dimgrey');
+
+                                contenedor1.setAttribute('type','text');
+                                contenedor2.setAttribute('type','text');
+
+                                contenedor1.innerText= value['name'];
+                                contenedor2.innerText= "Profesional: \n"+data3.nombre+" "+data3.apellidos;
+
+
+                                apartado.appendChild(contenedor1);
+                                apartado.appendChild(contenedor2);
+                                apartado.appendChild(espacio);
+                            })
                         }
                     });
                 });
@@ -110,12 +147,11 @@
 
     
 
-    <div class="mbr-overlay" style="opacity: 0.8; background-color: rgb(0, 0, 0);">
-    </div>
+    <div class="mbr-overlay" style="opacity: 0.8; background-color: rgb(0, 0, 0);"></div>
 
     <div class="container">
-        <div class="media-container-column mbr-white">
-            <h1 id="welcome" class="mbr-section-title align-left mbr-bold pb-3 mbr-fonts-style display-1"><p id="w"></p></h1>
+
+            <h1 id="welcome" class="mbr-section-title align-left mbr-bold pb-3 mbr-fonts-style display-1" style="padding-top: 35px"><p id="w"></p></h1>
               <div class="mbr-section-btn align-left">
 
                   <a class="btn btn-primary display-4" style='width:300px; height:50px'  onclick="serviciosNoUsados()">Servicios no demandados</a>
@@ -125,13 +161,23 @@
                   <a class="btn btn-primary display-4" style='width:300px; height:50px' href="listaPeticiones.html">Servicios con mas ingresos</a>
 
                   <a class="btn btn-primary display-4" style='width:300px; height:50px'  href="listaPeticiones.html">Profesionales mas demandados</a>
-				<br><br><br>
-				<br><br><br>
-				<br><br><br>
+				<br>
+                  <br>
+                  <br>
+                  <div class="media-container-column mbr-white">
+                      <div id="listaElem">
+                  <div class="mbr-content-title mbr-bold mbr-fonts-style display-7" id="listaName" type="text" > </div>
+                      <div class="mbr-content-title mbr-bold mbr-fonts-style display-4" id="listaDesc" type="text" > </div>
+                    </div>
+
+
+                  <div/>
             </div>
-            
+
+        <div>
         </div>
-    </div>
+
+    </div>>
 
 <br><br><br>
 <br><br><br>
