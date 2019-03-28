@@ -46,7 +46,10 @@ CREATE TABLE `servicio` (
 INSERT INTO `servicio` (`id_service`, `category`, `description`, `hours`, `name`, `price`, `usuario_id`) VALUES
 (1, 'Peluquería', 'Corte y peinado de cabello en la peluquería de moda', 1, 'Corte y peinado', 10, 4),
 (2, 'Mecanica', 'Reparación de tu vehículo en Taller LUIS', 2, 'Reparación coche', 40, 3),
-(3, 'Limpieza', 'Lavado completo de tu vehiculo en Taller LUIS', 1, 'Lavado coche', 10, 3);
+(3, 'Limpieza', 'Lavado completo de tu vehiculo en Taller LUIS', 1, 'Lavado coche', 10, 3),
+(4, 'Carpintería', 'Armario de madera de pino a medida', 1, 'Armario a medida', 150, 5),
+(5, 'Peluquería', 'Mechas californianas o como más le guste', 1, 'Mechas', 20, 4),
+(6, 'Carpintería', 'Cajoneras, zapateros, muebles... Y todo a medida', 1, 'Mobiliario a medida', 145, 5);
 
 -- --------------------------------------------------------
 
@@ -61,7 +64,7 @@ CREATE TABLE `solicitud` (
   `dir_num` varchar(255) DEFAULT NULL,
   `dir_poblacion` varchar(255) DEFAULT NULL,
   `estado` varchar(255) DEFAULT NULL,
-  `fecha_solicitud` varchar(255) DEFAULT NULL,
+  `fecha_solicitud` date DEFAULT NULL,
   `importe_cobrado` int(11) NOT NULL,
   `servicio_id` int(11) DEFAULT NULL,
   `usuario_id` int(11) DEFAULT NULL
@@ -72,9 +75,11 @@ CREATE TABLE `solicitud` (
 --
 
 INSERT INTO `solicitud` (`id_solicitud`, `descrp_estado`, `dir_calle`, `dir_num`, `dir_poblacion`, `estado`, `fecha_solicitud`, `importe_cobrado`, `servicio_id`, `usuario_id`) VALUES
-(1, '', 'Calle del Foso', '20', 'Madrid', 'PENDIENTE', '20/02/2019', 10, 1, 1),
-(2, '', 'Paseo de la Castellana', '150', 'Madrid', 'CONFIRMADA', '27/02/2019', 40, 2, 2),
-(3, 'El cliente quería únicamente la reparación', 'Paseo de la Castellana', '150', 'Madrid', 'CANCELADA', '27/02/2019', 10, 3, 2);
+(1, '', 'Calle del Foso', '20', 'Madrid', 'PENDIENTE', '2019-02-10', 10, 1, 1),
+(2, '', 'Paseo de la Castellana', '150', 'Madrid', 'CONFIRMADA', '2019-02-20', 40, 2, 2),
+(3, '', 'Calle Totana', '10', 'Madrid', 'COMPLETADA', '2019-03-20', 40, 1, 2),
+(4, '', 'Avenida Rinoceronte', '17', 'Getafe', 'COMPLETADA', '2019-01-18', 150, 4, 6),
+(5, 'El cliente quería únicamente la reparación', 'Paseo de la Castellana', '150', 'Madrid', 'CANCELADA', '2019-02-19', 0, 3, 2);
 
 -- --------------------------------------------------------
 
@@ -87,7 +92,7 @@ CREATE TABLE `usuario` (
   `apellidos` varchar(255) DEFAULT NULL,
   `ciudad` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
-  `fecha_nac` varchar(255) DEFAULT NULL,
+  `fecha_nac` date DEFAULT NULL,
   `nombre` varchar(255) DEFAULT NULL,
   `pass` varchar(255) DEFAULT NULL,
   `perfil` varchar(255) DEFAULT NULL
@@ -98,11 +103,13 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`iduser`, `apellidos`, `ciudad`, `email`, `fecha_nac`, `nombre`, `pass`, `perfil`) VALUES
-(1, 'Pérez Sierra', 'Madrid', 'josepe@gmail.com', '15/05/1966', 'José', 'pass1234', 'COSTUMER'),
-(2, 'Rodriguez ', 'Madrid', 'luismi@gmail.com', '16/02/1994', 'Luis Miguel', 'calamar', 'COSTUMER'),
-(3, 'Martinez Fernandez', 'Seseña', 'lmfos@gmail.com', '10/08/1990', 'Luis', 'pass1234', 'PROFESSIONAL'),
-(4, 'Undiano Mallenco', 'Fuenlabrada', 'undiAlber@gmail.com', '18/10/1973', 'Alberto', 'pass5678', 'PROFESSIONAL'),
-(5, 'de Burgos Bengoetxea', 'Valdemoro', 'rbbengoetxea@gmail.com', '15/08/1986', 'Ricardo', 'pass9012', 'ANALYIST');
+(1, 'Pérez Sierra', 'Madrid', 'josepe@gmail.com', '1966-05-15', 'José', 'pass', 'COSTUMER'),
+(2, 'Rodriguez ', 'Madrid', 'luismi@gmail.com', '1994-02-16', 'Luis Miguel', 'calamar', 'COSTUMER'),
+(3, 'Martinez Fernandez', 'Seseña', 'lmfos@gmail.com', '1990-08-10', 'Luis', 'pass', 'PROFESSIONAL'),
+(4, 'Undiano Mallenco', 'Fuenlabrada', 'undiAlber@gmail.com', '1973-10-18', 'Alberto', 'pass', 'PROFESSIONAL'),
+(5, 'García Montes', 'Aranjuez', 'garmon@gmail.com', '1995-02-21', 'Patricia', 'pass', 'PROFESSIONAL'),
+(6, 'Martinez Munuera', 'Las Rozas', 'rinomunu@gmail.com', '1973-10-18', 'Rinoceronte', 'pass', 'COSTUMER'),
+(7, 'de Burgos Bengoetxea', 'Valdemoro', 'rbbengoetxea@gmail.com', '1986-08-15', 'Ricardo', 'pass', 'ANALYIST');
 
 --
 -- Índices para tablas volcadas

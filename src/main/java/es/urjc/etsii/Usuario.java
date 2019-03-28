@@ -1,8 +1,8 @@
 package es.urjc.etsii;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.text.DateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,7 +27,7 @@ public class Usuario {
     private String email;
     private String perfil;  //CUSTOMER , PROFESSIONAL , ANALYST
     private String ciudad;
-    private String fechaNac;
+    private Date fechaNac;
 
     private List<Servicio> servicios;
     private List<Solicitud> solicitudes;
@@ -37,7 +37,7 @@ public class Usuario {
     private Usuario() {
     }
 
-    public Usuario(String pass, String nombre, String apellidos, String email, String perfil, String ciudad, String fechaNac) {
+    public Usuario(String pass, String nombre, String apellidos, String email, String perfil, String ciudad, Date fechaNac) {
         this.email = email;
         this.pass = pass;
         this.nombre = nombre;
@@ -71,11 +71,11 @@ public class Usuario {
         this.ciudad = ciudad;
     }
 
-    public String getFechaNac() {
+    public Date getFechaNac() {
         return fechaNac;
     }
 
-    public void setFechaNac(String fechaNac) {
+    public void setFechaNac(Date fechaNac) {
         this.fechaNac = fechaNac;
     }
     @Id

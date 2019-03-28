@@ -1,6 +1,8 @@
 package es.urjc.etsii;
 
 import javax.persistence.*;
+import java.sql.Date;
+
 /**
  * Entidad Solicitud.
  *
@@ -13,7 +15,7 @@ public class Solicitud {
 
     private Usuario usuario;
     private Servicio servicio;
-    private String fechaSolicitud; //formato : DDMMYYYY
+    private Date fechaSolicitud; //formato : YYYYMMDD
     private String dir_calle, dir_num , dir_poblacion;
     private int importeCobrado;
     private String estado, descrp_estado;  // “Pendiente”, “Confirmada”, “Denegada”, “Cancelada”, “Completada e “Incidencia”
@@ -21,7 +23,7 @@ public class Solicitud {
     public Solicitud() {
     }
 
-    public Solicitud(String fechaSolicitud, String dir_calle, String dir_num,
+    public Solicitud(Date fechaSolicitud, String dir_calle, String dir_num,
                      String dir_poblacion, int importeCobrado, String estado, String descrp_estado) {
 
         this.fechaSolicitud = fechaSolicitud;
@@ -63,11 +65,11 @@ public class Solicitud {
         this.servicio = servicio;
     }
 
-    public String getFechaSolicitud() {
+    public Date getFechaSolicitud() {
         return fechaSolicitud;
     }
 
-    public void setFechaSolicitud(String fechaSolicitud) {
+    public void setFechaSolicitud(Date fechaSolicitud) {
         this.fechaSolicitud = fechaSolicitud;
     }
 
