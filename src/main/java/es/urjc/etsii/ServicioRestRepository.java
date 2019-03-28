@@ -21,5 +21,6 @@ public interface ServicioRestRepository extends CrudRepository<Servicio, Integer
     List<Servicio> findByNameContains(@Param("name") String nombre);
     List<Servicio> findAllByOrderByNameAsc();
     List<Servicio> findServicioByUsuario_Email(@Param("usuario") String userEmail);
+    List<Servicio> findAllByOrderByNameAscUsuario_NombreAsc();
 
 }

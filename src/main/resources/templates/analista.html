@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html >
 <head>
-  <!-- Site made with Mobirise Website Builder v4.9.2, https://mobirise.com -->
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="generator" content="Mobirise v4.9.2, mobirise.com">
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-  <link rel="shortcut icon" href="/images/logo2.png" type="image/x-icon">
-  <meta name="description" content="Website Creator Description">
-  <title>Bienvenid@</title>
-  <link rel="stylesheet" href="/web/assets/mobirise-icons/mobirise-icons.css">
-  <link rel="stylesheet" href="/tether/tether.min.css">
-  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/bootstrap/css/bootstrap-grid.min.css">
-  <link rel="stylesheet" href="/bootstrap/css/bootstrap-reboot.min.css">
-  <link rel="stylesheet" href="/socicon/css/styles.css">
-  <link rel="stylesheet" href="/dropdown/css/style.css">
-  <link rel="stylesheet" href="/theme/css/style.css">
-  <link rel="stylesheet" href="/mobirise/css/mbr-additional.css" type="text/css">
+    <!-- Site made with Mobirise Website Builder v4.9.2, https://mobirise.com -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Mobirise v4.9.2, mobirise.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <link rel="shortcut icon" href="/images/logo2.png" type="image/x-icon">
+    <meta name="description" content="Website Creator Description">
+    <title>Bienvenid@</title>
+    <link rel="stylesheet" href="/web/assets/mobirise-icons/mobirise-icons.css">
+    <link rel="stylesheet" href="/tether/tether.min.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap-reboot.min.css">
+    <link rel="stylesheet" href="/socicon/css/styles.css">
+    <link rel="stylesheet" href="/dropdown/css/style.css">
+    <link rel="stylesheet" href="/theme/css/style.css">
+    <link rel="stylesheet" href="/mobirise/css/mbr-additional.css" type="text/css">
     <script language="JavaScript">
 
         function crearElemento(elemento, identificador, clase, texto, valor, ref, click, action, type) {
@@ -38,8 +38,8 @@
             apartado.innerText="";
 
             var solicitudes = new Array();
-           $.ajax({
-               async: false,
+            $.ajax({
+                async: false,
                 url: "http://localhost:8080/solicitudes/search/findAllBy"
             }).then(function (data1) {
                 $.each(data1._embedded.solicitudes, function (index, value) {
@@ -50,69 +50,53 @@
                         url: aux
                     }).then(function (data) {
                         solicitudes.push(data.name);
-
-
-
                     });
                 });
             });
 
             $.ajax({
                 async: false,
-                    url: "http://localhost:8080/servicios/search/findAllByOrderByNameAsc"
-                }).then(function (data2) {
-                    $.each(data2._embedded.servicios, function (index, value) {
-                        var noApto = true;
-
-                        for (x = 0; x < solicitudes.length; x++) {
-
-
-                            if (value['name'] === solicitudes[x]) {
-                                noApto = false;
-                            }
+                url: "http://localhost:8080/servicios/search/findAllByOrderByNameAscUsuario_NombreAsc"
+            }).then(function (data2) {
+                $.each(data2._embedded.servicios, function (index, value) {
+                    var noApto = true;
+                    for (x = 0; x < solicitudes.length; x++) {
+                        if (value['name'] === solicitudes[x]) {
+                            noApto = false;
                         }
-                        if (noApto) {
+                    }
+                    if (noApto) {
+                        var contenedor1= crearElemento('div', value['name'], 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', value['name'], '__','__','__','text' );
+                        var espacio= crearElemento('br', '__', '__', '__', '__', '__','__','__','__' );
+                        var urlName= value['_links']['usuario']['href'];
+                        $.ajax({
+                            async:false,
+                            url: urlName
+                        }).then(function(data3){
+                            var contenedor2= crearElemento('div', data3.nombre+" "+data3.apellidos, 'mbr-content-title mbr-bold mbr-fonts-style display-4', '__', data3.nombre+" "+data3.apellidos, '__','__','__','text' );
+                            contenedor1.setAttribute('style','background-color:#0069d9; color: white');
+                            contenedor2.setAttribute('style','background-color:lightsteelblue; color: dimgrey');
 
-                            var contenedor1= crearElemento('div', value['name'], 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', value['name'], '__','__','__','text' );
-                            var espacio= crearElemento('br', '__', '__', '__', '__', '__','__','__','__' );
-                            var urlName= value['_links']['usuario']['href'];
-                            $.ajax({
-                                async:false,
-                                url: urlName
-                            }).then(function(data3){
-                                var contenedor2= crearElemento('div', data3.nombre+" "+data3.apellidos, 'mbr-content-title mbr-bold mbr-fonts-style display-4', '__', data3.nombre+" "+data3.apellidos, '__','__','__','text' );
-                                contenedor1.setAttribute('style','background-color:#0069d9; color: white');
-                                contenedor2.setAttribute('style','background-color:lightsteelblue; color: dimgrey');
+                            contenedor1.setAttribute('type','text');
+                            contenedor2.setAttribute('type','text');
 
-                                contenedor1.setAttribute('type','text');
-                                contenedor2.setAttribute('type','text');
+                            contenedor1.innerText= value['name'];
+                            contenedor2.innerText= "Profesional: \n"+data3.nombre+" "+data3.apellidos;
 
-                                contenedor1.innerText= value['name'];
-                                contenedor2.innerText= "Profesional: \n"+data3.nombre+" "+data3.apellidos;
-
-
-                                apartado.appendChild(contenedor1);
-                                apartado.appendChild(contenedor2);
-                                apartado.appendChild(espacio);
-                            })
-                        }
-                    });
+                            apartado.appendChild(contenedor1);
+                            apartado.appendChild(contenedor2);
+                            apartado.appendChild(espacio);
+                        })
+                    }
                 });
-           // }
-
+            });
         }
 
-
     </script>
-
-
-        </head>
+</head>
 <body>
-  <!--Cabecera pagina-->
-  <section class="menu cid-rhFKKj91K6" once="menu" id="menu1-6">
-
-    
-
+<!--Cabecera pagina-->
+<section class="menu cid-rhFKKj91K6" once="menu" id="menu1-6">
     <nav class="navbar navbar-expand beta-menu navbar-dropdown align-items-center navbar-fixed-top navbar-toggleable-sm">
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <div class="hamburger">
@@ -134,8 +118,6 @@
             </div>
         </div>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            
-            
         </div>
     </nav>
 </section>
@@ -144,58 +126,41 @@
 
 
 <section class="engine"><a href="https://mobirise.info">Mobirise</a></section><section class="header9 cid-rhFKJqD3Vr mbr-fullscreen mbr-parallax-background" id="header9-5">
-
-    
-
     <div class="mbr-overlay" style="opacity: 0.8; background-color: rgb(0, 0, 0);"></div>
-
     <div class="container">
-
-            <h1 id="welcome" class="mbr-section-title align-left mbr-bold pb-3 mbr-fonts-style display-1" style="padding-top: 35px"><p id="w"></p></h1>
-              <div class="mbr-section-btn align-left">
-
-                  <a class="btn btn-primary display-4" style='width:300px; height:50px'  onclick="serviciosNoUsados()">Servicios no demandados</a>
-
-                  <a class="btn btn-primary display-4" style='width:300px; height:50px' href="listaPeticiones.html">Servicios mas demandados</a>
-
-                  <a class="btn btn-primary display-4" style='width:300px; height:50px' href="listaPeticiones.html">Servicios con mas ingresos</a>
-
-                  <a class="btn btn-primary display-4" style='width:300px; height:50px'  href="listaPeticiones.html">Profesionales mas demandados</a>
-				<br>
-                  <br>
-                  <br>
-                  <div class="media-container-column mbr-white">
-                      <div id="listaElem">
-                  <div class="mbr-content-title mbr-bold mbr-fonts-style display-7" id="listaName" type="text" > </div>
-                      <div class="mbr-content-title mbr-bold mbr-fonts-style display-4" id="listaDesc" type="text" > </div>
-                    </div>
-
-
-                  </div>
+        <h1 id="welcome" class="mbr-section-title align-left mbr-bold pb-3 mbr-fonts-style display-1" style="padding-top: 35px"><p id="w"></p></h1>
+        <div class="mbr-section-btn align-left">
+            <a class="btn btn-primary display-4" style='width:300px; height:50px'  onclick="serviciosNoUsados()">Servicios no demandados</a>
+            <a class="btn btn-primary display-4" style='width:300px; height:50px' href="listaPeticiones.html">Servicios mas demandados</a>
+            <a class="btn btn-primary display-4" style='width:300px; height:50px' href="listaPeticiones.html">Servicios con mas ingresos</a>
+            <a class="btn btn-primary display-4" style='width:300px; height:50px'  href="listaPeticiones.html">Profesionales mas demandados</a>
+            <br>
+            <br>
+            <br>
+            <div class="media-container-column mbr-white">
+                <div id="listaElem">
+                    <div class="mbr-content-title mbr-bold mbr-fonts-style display-7" id="listaName" type="text" > </div>
+                    <div class="mbr-content-title mbr-bold mbr-fonts-style display-4" id="listaDesc" type="text" > </div>
+                </div>
             </div>
-
+        </div>
         <div>
         </div>
 
     </div>
 
-<br><br><br>
-<br><br><br>
-<br><br><br>
-<br><br><br>
-<br><br><br>
-<br><br><br>
+    <br><br><br>
+    <br><br><br>
+    <br><br><br>
+    <br><br><br>
+    <br><br><br>
+    <br><br><br>
 </section>
 <!--Aqui-->
 
 
 <!--Pie de la página-->
 <section class="cid-rhFKZ6QvKs" id="footer1-7">
-
-    
-
-    
-
     <div class="container">
         <div class="media-container-row content text-white">
             <div class="col-12 col-md-3">
@@ -273,23 +238,22 @@
             </div>
         </div>
     </div>
+
 </section>
 
-  <script language="JavaScript">
-      var usuario= localStorage.getItem('usuario');
-      document.getElementById('w').innerText = "Bienvenid@ "+ usuario;
-  </script>
+<script language="JavaScript">
+    var usuario= localStorage.getItem('usuario');
+    document.getElementById('w').innerText = "Bienvenid@ "+ usuario;
+</script>
 
-  <script src="/web/assets/jquery/jquery.min.js"></script>
-  <script src="/popper/popper.min.js"></script>
-  <script src="/tether/tether.min.js"></script>
-  <script src="/bootstrap/js/bootstrap.min.js"></script>
-  <script src="/parallax/jarallax.min.js"></script>
-  <script src="/dropdown/js/script.min.js"></script>
-  <script src="/touchswipe/jquery.touch-swipe.min.js"></script>
-  <script src="/smoothscroll/smooth-scroll.js"></script>
-  <script src="/theme/js/script.js"></script>
-  
-  
+<script src="/web/assets/jquery/jquery.min.js"></script>
+<script src="/popper/popper.min.js"></script>
+<script src="/tether/tether.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/parallax/jarallax.min.js"></script>
+<script src="/dropdown/js/script.min.js"></script>
+<script src="/touchswipe/jquery.touch-swipe.min.js"></script>
+<script src="/smoothscroll/smooth-scroll.js"></script>
+<script src="/theme/js/script.js"></script>
 </body>
 </html>
