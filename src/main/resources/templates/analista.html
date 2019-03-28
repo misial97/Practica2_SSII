@@ -19,7 +19,11 @@
     <link rel="stylesheet" href="/theme/css/style.css">
     <link rel="stylesheet" href="/mobirise/css/mbr-additional.css" type="text/css">
     <script language="JavaScript">
+        function detalles(url){
+            localStorage.setItem('urlSer',url);
+            window.location='/analista/detallesSer';
 
+        }
         function crearElemento(elemento, identificador, clase, texto, valor, ref, click, action, type) {
             var item = document.createElement(elemento);
             if (identificador !=='__'){ item.id = identificador; }
@@ -102,6 +106,8 @@
                         var contenedor1= crearElemento('div', nombreSer, 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', '__', '__','__','__','text' );
                         var espacio= crearElemento('br', '__', '__', '__', '__', '__','__','__','__' );
                         var contenedor2= crearElemento('div',nombreUsr , 'mbr-content-title mbr-bold mbr-fonts-style display-4', '__', '__', '__','__','__','text' );
+                        var detalles= crearElemento('a', urlSer, 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', 'detalles', '__','__','__','text' );
+
                         contenedor1.setAttribute('style','background-color:#0069d9; color: white');
                         contenedor2.setAttribute('style','background-color:lightsteelblue; color: dimgrey');
 
@@ -109,10 +115,13 @@
                         contenedor2.setAttribute('type','text');
 
                         contenedor1.innerText= nombreSer;
-                        contenedor2.innerText= "Profesional: \n"+nombreUsr+"\nCantidad="+num;
+                        contenedor2.innerText= "Profesional: \n"+nombreUsr+"\nVeces solicitado: \n"+num;
+                        detalles.innerText="Ver detalles...";
+                        detalles.setAttribute('onclick', 'detalles(this.id)');
 
                         apartado.appendChild(contenedor1);
                         apartado.appendChild(contenedor2);
+                        apartado.appendChild(detalles);
                         apartado.appendChild(espacio);
 
                     });
@@ -157,6 +166,7 @@
                     if (noApto) {
                         var contenedor1= crearElemento('div', value['name'], 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', value['name'], '__','__','__','text' );
                         var espacio= crearElemento('br', '__', '__', '__', '__', '__','__','__','__' );
+
                         var urlName= value['_links']['usuario']['href'];
                         $.ajax({
                             async:false,
@@ -166,14 +176,17 @@
                             contenedor1.setAttribute('style','background-color:#0069d9; color: white');
                             contenedor2.setAttribute('style','background-color:lightsteelblue; color: dimgrey');
 
+
                             contenedor1.setAttribute('type','text');
                             contenedor2.setAttribute('type','text');
 
                             contenedor1.innerText= value['name'];
                             contenedor2.innerText= "Profesional: \n"+data3.nombre+" "+data3.apellidos;
 
+
                             apartado.appendChild(contenedor1);
                             apartado.appendChild(contenedor2);
+
                             apartado.appendChild(espacio);
                         })
                     }
@@ -219,10 +232,10 @@
     <div class="container">
         <h1 id="welcome" class="mbr-section-title align-left mbr-bold pb-3 mbr-fonts-style display-1" style="padding-top: 35px"><p id="w"></p></h1>
         <div class="mbr-section-btn align-left">
-            <a class="btn btn-primary display-4" style='width:300px; height:50px'  onclick="serviciosNoUsados()">Servicios no demandados</a>
-            <a class="btn btn-primary display-4" style='width:300px; height:50px' onclick="serviciosMasDemandados()">Servicios mas demandados</a>
-            <a class="btn btn-primary display-4" style='width:300px; height:50px' href="listaPeticiones.html">Servicios con mas ingresos</a>
-            <a class="btn btn-primary display-4" style='width:300px; height:50px'  href="listaPeticiones.html">Profesionales mas demandados</a>
+            <a class="btn btn-primary display-4" style='width:400px; height:50px'  onclick="serviciosNoUsados()">Servicios no demandados</a>
+            <a class="btn btn-primary display-4" style='width:400px; height:50px' onclick="serviciosMasDemandados()">Servicios mas demandados</a>
+            <a class="btn btn-primary display-4" style='width:400px; height:50px' href="listaPeticiones.html">Servicios con mas ingresos</a>
+            <a class="btn btn-primary display-4" style='width:400px; height:50px'  href="listaPeticiones.html">Profesionales mas demandados</a>
             <br>
             <br>
             <br>
