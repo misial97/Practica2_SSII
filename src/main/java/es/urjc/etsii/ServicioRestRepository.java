@@ -4,6 +4,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
+import javax.swing.*;
 import java.util.List;
 
 /**
@@ -19,6 +20,6 @@ public interface ServicioRestRepository extends CrudRepository<Servicio, Integer
     List<Servicio> findByName(@Param("name") String nombre);
     List<Servicio> findByNameContains(@Param("name") String nombre);
     List<Servicio> findAllByOrderByNameAsc();
-    List<Servicio> findServicioByUsuario_Iduser(int id);
+    List<Servicio> findServicioByUsuario_Email(@Param("usuario") String userEmail);
 
 }

@@ -18,43 +18,20 @@
     <link rel="stylesheet" href="/dropdown/css/style.css">
     <link rel="stylesheet" href="/theme/css/style.css">
     <link rel="stylesheet" href="/mobirise/css/mbr-additional.css" type="text/css">
+
     <script language="JavaScript">
-
-    function addServicio() {
-            // Primero se captan los datos del formulario y pasan a un objeto.
-        var confirmacion = confirm("Se va a crear un nuevo servicio");
-        if (confirmacion == true){
-            var urlUsuarioLogado = localStorage.getItem('usuarioJSON');
-            //alert("UsuarioLogado = "+localStorage.getItem('usuario'));
-            //alert("idUsuarioLogado = " + urlUsuarioLogado);
-            var formData = {};
-            /*private String name, category, description;
-            private int hours, price;
-            private Usuario usuario;*/
-            formData['name'] = $('#addName').val();
-            formData['category'] = $('#addCat').val();
-            formData['description'] = $('#addDes').val();
-            formData['hours'] = $('#addHours').val();
-            formData['price'] = $('#addPrice').val();
-            // Para el usuario hay que enviar la URI completa al objeto existente:
-            formData['usuario'] = urlUsuarioLogado;
-            $.ajax({
-                type: "POST",
-                url: 'http://localhost:8080/servicios/',
-                dataType: 'json',
-                async: false,
-                // El objeto hay que convertirlo a texto
-                data: JSON.stringify(formData),
-                contentType: 'application/json'
-            });
-            alert ("Servicio creado");
-        }else{
-            alert("No se ha creado el servicio");
+        function crearElemento(elemento, identificador, clase, texto, valor, ref) {
+            var item = document.createElement(elemento);
+            if (identificador !=='__'){ item.id = identificador; }
+            if (clase !=='__') { item.className = clase; }
+            if (texto !=='__') { item.innerText = texto; }
+            if (valor !== '__') { item.value = valor; }
+            if (ref !=='__') { item.href = ref; }
+            return item;
         }
-    }
-
     </script>
 </head>
+
 <body>
   <!--Cabecera pagina-->
   <section class="menu cid-rhFKKj91K6" once="menu" id="menu1-6">
@@ -88,36 +65,35 @@
 <section class="counters3 counters cid-ri3GCVuT85" id="counters3-3">
     <div class="container pt-4 mt-2">
 		<br><br><br>
-		<br><br><br>
+        <br><br><br>
+        <br><br><br>
 
         <h2 class="mbr-section-title pb-3 align-center mbr-fonts-style display-2">
-                    Crea un nuevo servicio
+                    Sus servicios creados
         </h2>
-        <h3 class="mbr-section-subtitle pb-5 align-center mbr-fonts-style display-5">
-				Rellene los campos necesarios y pinche en enviar para crear el servicio.
+        <h3 id="noHay" class="mbr-section-subtitle pb-5 align-center mbr-fonts-style display-5">
+				Todos los servicios se pueden borrar, modificar o crear nuevos desde el menú anterior.
         </h3>
 
-        <div id="introducir">
-            <form id="nuevoserv" action="javascript:addServicio();">
-                Nombre:&nbsp;<input name="addName" id="addName" type="text"/>
-                Categoría:&nbsp;<input name="addCat" id="addCat" type="text"/>
-                Descripción:&nbsp;<input name="addDes" id="addDes" type="text"/>
-                <br><br>
-                Horas:&nbsp;<input name="addHours" id="addHours" type="text"/>
-                Precio:&nbsp;<input name="addPrice" id="addPrice" type="text"/>
-                <br><br>
-                <div class="card px-3 align-center">
-                    <br><br><br>
-                    <input type="submit" class="btn btn-primary display-4">
-                    <br><br><br>
+        <!--<form action="javascript:consultaServiciosUsuario();">-->
+            <div class="cards-block">
+                <div id="div_insert" class="cards-container">
+                    <!-- <div class="card px-3 align-left col-12">
+                         <div class="panel-item p-4 d-flex align-items-center">
+                             Inserta codigo
+                        </div>
+                    </div>-->
                 </div>
-            </form>
-        </div>
+            </div>
+        <!-- </form>-->
 
-    </div>
-</section>
+        <br><br><br>
+        <br><br><br>
+     </div>
 
-<!--Aqui-->
+ </section>
+
+ <!--Aqui-->
 
 
   <!--Pie de la página-->
@@ -210,7 +186,47 @@
   <script src="/touchswipe/jquery.touch-swipe.min.js"></script>
   <script src="/smoothscroll/smooth-scroll.js"></script>
   <script src="/theme/js/script.js"></script>
-  
-  
+
+  <script language="JavaScript">
+
+      var user = localStorage.getItem('usuarioEmail');
+      var child,title,des,textTitle;
+      var i=0;
+      $.ajax({
+          url: "http://localhost:8080/servicios/search/findServicioByUsuario_Email?usuario=" + user
+      }).then(function (data) {
+          $.each(data._embedded.servicios, function (index, value) {
+              //        function crearElemento(elemento, identificador, clase, texto, valor, ref) {
+              var id = 'consultaServicio'+i;
+              child = crearElemento('div', id, 'card-text', '__', '__', '__');
+              title= crearElemento('h4','__','mbr-content-title mbr-bold mbr-fonts-style display-7', '__', '__', '__');
+              textTitle = crearElemento('p','__','__', '__', '__', '__');
+              textTitle.innerText = value['name'];
+              des = crearElemento('p','__','mbr-content-text mbr-fonts-style display-7', '__', '__', '__');
+              des.innerText = value['description'];
+              var parent = document.getElementById('div_insert');
+              parent.appendChild(child);
+              child.appendChild(title);
+              title.appendChild(textTitle);
+              child.after(des);
+              i=i+1;
+          });
+          if(i==0){
+              var noServicios = crearElemento('h2','__','mbr-section-title pb-3 align-center mbr-fonts-style display-2', '__', '__', '__');
+              var textoNo = crearElemento('p','__','__', '__', '__', '__');
+              var textoNo2 = crearElemento('p','__','__', '__', '__', '__');
+             // var salto =crearElemento('br','__','__', '__', '__', '__');
+              textoNo.innerText = "¡Vaya!";
+              textoNo2.innerText = "Parece que no tienes ningún servicio creado.";
+              noServicios.appendChild(textoNo);
+              //textoNo.after(salto);
+              textoNo.after(textoNo2);
+              var despuesDe = document.getElementById('noHay');
+              despuesDe.after(noServicios);
+          }
+      });
+
+  </script>
+
 </body>
 </html>

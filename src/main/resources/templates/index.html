@@ -40,8 +40,11 @@
              console.log(name_aux);
              var url_aux =data._embedded.usuarios[0]._links.self.href;
              console.log(url_aux);
+             var email_aux =data._embedded.usuarios[0].email;
+             console.log(url_aux);
                 localStorage.setItem('usuario', name_aux);
                 localStorage.setItem('usuarioJSON',url_aux);
+                localStorage.setItem('usuarioEmail',email_aux);
                 if((data._embedded.usuarios[0].pass)===(pass)){
                     console.log("TODO OK --> LOGIN");
                     if((data._embedded.usuarios[0].perfil)===("COSTUMER")) {
