@@ -18,44 +18,80 @@
     <link rel="stylesheet" href="/dropdown/css/style.css">
     <link rel="stylesheet" href="/theme/css/style.css">
     <link rel="stylesheet" href="/mobirise/css/mbr-additional.css" type="text/css">
-    <script language="JavaScript">
 
-    function addServicio() {
-            // Primero se captan los datos del formulario y pasan a un objeto.
-        var confirmacion = confirm("Se va a crear un nuevo servicio");
-        if (confirmacion == true){
-            var urlUsuarioLogado = localStorage.getItem('usuarioJSON');
-            //alert("UsuarioLogado = "+localStorage.getItem('usuario'));
-            //alert("idUsuarioLogado = " + urlUsuarioLogado);
-            var formData = {};
-            /*private String name, category, description;
-            private int hours, price;
-            private Usuario usuario;*/
-            formData['name'] = $('#addName').val();
-            formData['category'] = $('#addCat').val();
-            formData['description'] = $('#addDes').val();
-            formData['hours'] = $('#addHours').val();
-            formData['price'] = $('#addPrice').val();
-            // Para el usuario hay que enviar la URI completa al objeto existente:
-            formData['usuario'] = urlUsuarioLogado;
-            $.ajax({
-                type: "POST",
-                url: 'http://localhost:8080/servicios/',
-                dataType: 'json',
-                async: false,
-                // El objeto hay que convertirlo a texto
-                data: JSON.stringify(formData),
-                contentType: 'application/json'
-            });
-            alert ("Servicio creado");
-            location.reload();
-        }else{
-            alert("No se ha creado el servicio");
+    <script language="JavaScript">
+        var urlSelected = "";
+        function ocultaMuestra(urlServicioSelected){
+            var seccionMuestraServicio = document.getElementById('modificar');
+            seccionMuestraServicio.setAttribute('style','display:block');
+            urlSelected = urlServicioSelected;
+            muestraServicio(urlSelected);
         }
-    }
+
+        function muestraServicio(url) {
+            var atri,titulo;
+            $.ajax({
+                url: url
+            }).then(function (data) {
+                titulo = document.getElementById('tituloModif');
+                titulo.innerText = "Has selecionado el servicio : " + data.name;
+                atri = document.getElementById('modifName');
+                atri.setAttribute('value', data.name);
+                atri = document.getElementById('modifCat');
+                atri.setAttribute('value', data.category);
+                atri = document.getElementById('modifDes');
+                atri.setAttribute('value', data.description);
+                atri = document.getElementById('modifHours');
+                atri.setAttribute('value', data.hours);
+                atri = document.getElementById('modifPrice');
+                atri.setAttribute('value', data.price);
+            });
+        }
+        function modifServicio(url) {
+            // Primero se captan los datos del formulario y pasan a un objeto.
+            var confirmacion = confirm("Se va a modificar el servicio seleccionado.");
+            if (confirmacion == true) {
+                var formData = {};
+                formData['name'] = $('#modifName').val();
+                formData['category'] = $('#modifCat').val();
+                formData['description'] = $('#modifDes').val();
+                formData['hours'] = $('#modifHours').val();
+                formData['price'] = $('#modifPrice').val();
+                //formData['idService'] = $('#id').val();
+                // Para el usuario hay que enviar la URI completa al objeto existente:
+                //formData['usuario'] = 'http://localhost:8080/servicios/' + $('#id').val();
+                $.ajax({
+                    type: "PUT",
+                    url: url,
+                    dataType: 'json',
+                    async: false,
+                    // El objeto hay que convertirlo a texto
+                    data: JSON.stringify(formData),
+                    contentType: 'application/json'
+                });
+                alert("Servicio modificado correctamente.");
+                location.reload();
+            }else{
+                alert("El servicio no se ha modificado.");
+            }
+        }
+
+        function crearElemento(elemento, identificador, clase, texto, valor, ref, click, action, type) {
+            var item = document.createElement(elemento);
+            if (identificador !=='__'){ item.id = identificador; }
+            if (clase !=='__') { item.className = clase; }
+            if (texto !=='__') { item.innerText = texto; }
+            if (valor !== '__') { item.value = valor; }
+            if (ref !=='__') { item.href = ref; }
+            if (click !=='__') { item.onclick = click; }
+            if (action !=='__') { item.action = action; }
+            if (type !=='__') { item.type = type; }
+            return item;
+        }
 
     </script>
 </head>
+
 <body>
   <!--Cabecera pagina-->
   <section class="menu cid-rhFKKj91K6" once="menu" id="menu1-6">
@@ -89,39 +125,47 @@
 <section class="counters3 counters cid-ri3GCVuT85" id="counters3-3">
     <div class="container pt-4 mt-2">
 		<br><br><br>
-		<br><br><br>
+        <br><br><br>
+        <br><br><br>
 
         <h2 class="mbr-section-title pb-3 align-center mbr-fonts-style display-2">
-                    Crea un nuevo servicio
+                    Modificar servicio
         </h2>
-        <h3 class="mbr-section-subtitle pb-5 align-center mbr-fonts-style display-5">
-				Rellene los campos necesarios y pinche en enviar para crear el servicio.
+        <h3 id="noHay" class="mbr-section-subtitle pb-5 align-center mbr-fonts-style display-5">
+				Simplemente haga click sobre el servicio a modificar para ir al menú.
         </h3>
 
-        <div id="introducir">
-            <form id="nuevoserv" action="javascript:addServicio();">
-                Nombre:&nbsp;<input name="addName" id="addName" type="text"/>
-                <br><br>
-                Categoría:&nbsp;<input name="addCat" id="addCat" type="text"/>
-                <br><br>
-                Descripción:&nbsp;<input name="addDes" id="addDes" type="text" style="width:800px;"/>
-                <br><br>
-                Horas:&nbsp;<input name="addHours" id="addHours" type="number"/>
-                <br><br>
-                Precio:&nbsp;<input name="addPrice" id="addPrice" type="number"/> €
-                <br><br>
-                <div class="card px-3 align-center">
-                    <br><br><br>
-                    <input type="submit" class="btn btn-primary display-4">
-                    <br><br><br>
+            <div class="cards-block">
+                <div id="div_insert" class="cards-container">
+
                 </div>
+                <br><br>
+            </div>
+        <div id="modificar" style="display:none">
+            <h2 id="tituloModif" class="mbr-section-title pb-3 align-center mbr-fonts-style display-2"></h2>
+            <br><br>
+            <form id="modifserv" action="javascript:modifServicio(urlSelected);">
+                Nombre:&nbsp;<input name="modifName" id="modifName" type="text" value=""/>
+                <br><br>
+                Categoría:&nbsp;<input name="modifCat" id="modifCat" type="text" value=""/>
+                <br><br>
+                Descripción:&nbsp;<input name="modifDes" id="modifDes" type="text" style="width:800px;" value=""/>
+                <br><br>
+                Horas:&nbsp;<input name="modifHours" id="modifHours" type="number" value=""/>
+                <br><br>
+                Precio:&nbsp;<input name="modifPrice" id="modifPrice" type="number" value=""/>&nbsp;€
+                <!--ID Usuario:&nbsp;<input name="modifUser" id="modifUser" type="text"/>-->
+                <br><br>
+                <input type="submit" class="btn btn-primary display-4"/>
             </form>
         </div>
+        <br><br><br>
+        <br><br><br>
+     </div>
 
-    </div>
-</section>
+ </section>
 
-<!--Aqui-->
+ <!--Aqui-->
 
 
   <!--Pie de la página-->
@@ -214,7 +258,44 @@
   <script src="/touchswipe/jquery.touch-swipe.min.js"></script>
   <script src="/smoothscroll/smooth-scroll.js"></script>
   <script src="/theme/js/script.js"></script>
-  
-  
+
+  <script language="JavaScript">
+
+      var user = localStorage.getItem('usuarioEmail');
+      var child,title,des,textTitle;
+      var i=0;
+      $.ajax({
+          url: "http://localhost:8080/servicios/search/findServicioByUsuario_Email?usuario=" + user
+      }).then(function (data) {
+          $.each(data._embedded.servicios, function (index, value) {
+              //        function crearElemento(elemento, identificador, clase, texto, valor, ref) {
+              var id = 'consultaServicio'+i;
+              child = crearElemento('div', id, 'card-text', '__', '__', '__');
+              title = crearElemento('a',value['_links']['self']['href'], 'mbr-content-title mbr-bold mbr-fonts-style display-7', value['name'], '__', '__');
+              title.setAttribute('onclick','ocultaMuestra(this.id)');
+              title.setAttribute('style','color:rgba(0,151,255,1);');
+              des = crearElemento('p','__','mbr-content-text mbr-fonts-style display-7', '__', '__', '__');
+              des.innerText = value['description'];
+              var parent = document.getElementById('div_insert');
+              parent.appendChild(child);
+              child.appendChild(title);
+              child.after(des);
+              i=i+1;
+          });
+          if(i==0){
+              var noServicios = crearElemento('h2','__','mbr-section-title pb-3 align-center mbr-fonts-style display-2', '__', '__', '__');
+              var textoNo = crearElemento('p','__','__', '__', '__', '__');
+              var textoNo2 = crearElemento('p','__','__', '__', '__', '__');
+              textoNo.innerText = "¡Vaya!";
+              textoNo2.innerText = "Parece que no tienes ningún servicio creado.";
+              noServicios.appendChild(textoNo);
+              textoNo.after(textoNo2);
+              var despuesDe = document.getElementById('noHay');
+              despuesDe.after(noServicios);
+          }
+      });
+
+  </script>
+
 </body>
 </html>
