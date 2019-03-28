@@ -202,9 +202,9 @@
           cat = document.getElementById('insertCat');
           cat.append(data.category);
           hour = document.getElementById('insertHour');
-          hour.append(data.hours);
+          hour.append(data.hours + " horas");
           precio = document.getElementById('insertPrecio');
-          precio.append(data.price);
+          precio.append(data.price + " €");
           $.ajax({
               url: data._links.usuario.href
           }).then(function (dataUser) {
