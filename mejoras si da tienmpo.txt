@@ -1,0 +1,3 @@
+-Error de java scrpit con scroll
+-Espacios en las cajas de analista
+-Mensaje login de error contraseña o usuario
