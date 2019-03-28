@@ -36,6 +36,97 @@
             if (type !=='__') { item.type = type; }
             return item;
         }
+        function serviciosMasIngresos() {
+            var apartado = document.getElementById('listaElem');
+            apartado.innerText="";
+            var estatus;
+
+
+            var solicitudes = new Array();
+            var camposConcat;
+            $.ajax({
+                async: false,
+                url: "http://localhost:8080/servicios/search/findAllByOrderByNameAsc"
+            }).then(function (data) {
+                $.each(data._embedded.servicios, function (index, value) {
+                    var ingresos = 0;
+                    var estatus;
+                    var cont=0;
+                    var numeroSol = value['solicitud'].length;
+                    if (numeroSol > 0) {
+
+                        for (x = 0; x < numeroSol; x++) {
+                            estatus = value['solicitud'][x]['estado'];
+                            if (estatus === 'COMPLETADA') {
+                                ingresos = value['solicitud'][x]['importeCobrado'] + ingresos;
+                                cont++;
+                                console.log(ingresos);
+                                console.log(estatus);
+
+                            }
+                        }
+                        if (cont > 0) {
+
+                        camposConcat = ingresos + "*" + value['_links']['self']['href'] + "*" + cont;
+                        solicitudes.push(camposConcat);
+                        console.log(camposConcat);
+                    }
+                }
+                });
+
+                });
+
+            function compare(a, b) {
+                var aux1=parseInt(a.split("*",1));
+                var aux2=parseInt(b.split("*",1));
+                return aux2 - aux1;
+            }
+            solicitudes.sort(compare);
+
+            for(i=0;i<solicitudes.length;i++){
+                var todo= solicitudes[i].split("*",3);
+                var urlSer=todo[1];
+                var num=todo[0];
+                var cantidad= todo[2];
+                var nombreSer;
+                var nombreUsr;
+                $.ajax({
+                    async: false,
+                    url: urlSer
+                }).then(function (data1) {
+                    nombreSer= data1.name;
+                    console.log(data1._links.usuario.href);
+                    $.ajax({
+                        async: false,
+                        url: data1._links.usuario.href
+                    }).then(function (data2) {
+                        nombreUsr= data2.nombre+" "+data2.apellidos;
+                        var contenedor1= crearElemento('div', nombreSer, 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', '__', '__','__','__','text' );
+                        var espacio= crearElemento('br', '__', '__', '__', '__', '__','__','__','__' );
+                        var contenedor2= crearElemento('div',nombreUsr , 'mbr-content-title mbr-bold mbr-fonts-style display-4', '__', '__', '__','__','__','text' );
+                        var detalles= crearElemento('a', urlSer, 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', 'detalles', '__','__','__','text' );
+
+                        contenedor1.setAttribute('style','background-color:#0069d9; color: white');
+                        contenedor2.setAttribute('style','background-color:lightsteelblue; color: dimgrey');
+
+                        contenedor1.setAttribute('type','text');
+                        contenedor2.setAttribute('type','text');
+
+                        contenedor1.innerText= nombreSer;
+                        contenedor2.innerText= "Profesional: \n"+nombreUsr+"\nImporte Cobrado: \n"+num+"$\nSolicitudes completadas: \n"+cantidad;
+                        detalles.innerText="Ver detalles...";
+                        detalles.setAttribute('onclick', 'detalles(this.id)');
+
+                        apartado.appendChild(contenedor1);
+                        apartado.appendChild(contenedor2);
+                        apartado.appendChild(detalles);
+                        apartado.appendChild(espacio);
+
+                    });
+                });
+            }
+
+        }
         function serviciosMasDemandados() {
             var apartado = document.getElementById('listaElem');
             apartado.innerText="";
@@ -52,31 +143,6 @@
                             camposConcat=numeroSol+"*"+value['_links']['self']['href'];
                             solicitudes.push(camposConcat);
                         }
-
-
-                  /*  if (noApto) {
-                        var contenedor1= crearElemento('div', value['name'], 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', value['name'], '__','__','__','text' );
-                        var espacio= crearElemento('br', '__', '__', '__', '__', '__','__','__','__' );
-                        var urlName= value['_links']['usuario']['href'];
-                        $.ajax({
-                            async:false,
-                            url: urlName
-                        }).then(function(data3){
-                            var contenedor2= crearElemento('div', data3.nombre+" "+data3.apellidos, 'mbr-content-title mbr-bold mbr-fonts-style display-4', '__', data3.nombre+" "+data3.apellidos, '__','__','__','text' );
-                            contenedor1.setAttribute('style','background-color:#0069d9; color: white');
-                            contenedor2.setAttribute('style','background-color:lightsteelblue; color: dimgrey');
-
-                            contenedor1.setAttribute('type','text');
-                            contenedor2.setAttribute('type','text');
-
-                            contenedor1.innerText= value['name'];
-                            contenedor2.innerText= "Profesional: \n"+data3.nombre+" "+data3.apellidos;
-
-                            apartado.appendChild(contenedor1);
-                            apartado.appendChild(contenedor2);
-                            apartado.appendChild(espacio);
-                        })
-                    } */
                 });
             });
             function compare(a, b) {
@@ -175,10 +241,12 @@
                             var contenedor2= crearElemento('div', data3.nombre+" "+data3.apellidos, 'mbr-content-title mbr-bold mbr-fonts-style display-4', '__', data3.nombre+" "+data3.apellidos, '__','__','__','text' );
                             contenedor1.setAttribute('style','background-color:#0069d9; color: white');
                             contenedor2.setAttribute('style','background-color:lightsteelblue; color: dimgrey');
+                            var detalles= crearElemento('a','__', 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', 'detalles', '__','__','__','text' );
 
 
                             contenedor1.setAttribute('type','text');
                             contenedor2.setAttribute('type','text');
+                            detalles.innerText=" ";
 
                             contenedor1.innerText= value['name'];
                             contenedor2.innerText= "Profesional: \n"+data3.nombre+" "+data3.apellidos;
@@ -186,6 +254,7 @@
 
                             apartado.appendChild(contenedor1);
                             apartado.appendChild(contenedor2);
+                            apartado.appendChild(detalles);
 
                             apartado.appendChild(espacio);
                         })
@@ -234,7 +303,7 @@
         <div class="mbr-section-btn align-left">
             <a class="btn btn-primary display-4" style='width:400px; height:50px'  onclick="serviciosNoUsados()">Servicios no demandados</a>
             <a class="btn btn-primary display-4" style='width:400px; height:50px' onclick="serviciosMasDemandados()">Servicios mas demandados</a>
-            <a class="btn btn-primary display-4" style='width:400px; height:50px' href="listaPeticiones.html">Servicios con mas ingresos</a>
+            <a class="btn btn-primary display-4" style='width:400px; height:50px' onclick="serviciosMasIngresos()">Servicios con mas ingresos</a>
             <a class="btn btn-primary display-4" style='width:400px; height:50px'  href="listaPeticiones.html">Profesionales mas demandados</a>
             <br>
             <br>
