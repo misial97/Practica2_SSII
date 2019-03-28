@@ -39,4 +39,6 @@ public class MainController {
     @RequestMapping("/profesional/consultaServicios")
     public String consulta(Map<String, Object> model) { return "consultaServicios"; }
 
+    @RequestMapping("/profesional/borrarServicios")
+    public String borra(Map<String, Object> model) { return "borrarServicios"; }
 }
