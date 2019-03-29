@@ -29,13 +29,19 @@ public class Servicio {
         this.hours = hours;
         this.price = price;
     }
-   @OneToMany(mappedBy = "servicio")
-    public List<Solicitud> getSolicitud() {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public int getIdService() {
+        return idService;
+    }
+
+    @OneToMany(mappedBy = "servicio")
+    public List<Solicitud> getSolicitudes() {
         return solicitudes;
     }
 
-    public void setSolicitud(List<Solicitud> solicitud) {
-        this.solicitudes = solicitud;
+    public void setSolicitudes(List<Solicitud> solicitudes) {
+        this.solicitudes = solicitudes;
     }
 
     @ManyToOne
@@ -46,11 +52,6 @@ public class Servicio {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
-    }
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public int getIdService() {
-        return idService;
     }
 
     public void setIdService(int idService) {
