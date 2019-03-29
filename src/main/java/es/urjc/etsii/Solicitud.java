@@ -15,7 +15,7 @@ public class Solicitud {
 
     private Usuario usuario;
     private Servicio servicio;
-    private Date fechaSolicitud; //formato : YYYYMMDD
+    private Date fechaSolicitud, fechaServicio; //formato : YYYYMMDD
     private String dir_calle, dir_num , dir_poblacion;
     private int importeCobrado;
     private String estado, descrp_estado;  // “Pendiente”, “Confirmada”, “Denegada”, “Cancelada”, “Completada e “Incidencia”
@@ -23,9 +23,10 @@ public class Solicitud {
     public Solicitud() {
     }
 
-    public Solicitud(Date fechaSolicitud, String dir_calle, String dir_num,
+    public Solicitud(Date fechaSolicitud, Date fechaServicio, String dir_calle, String dir_num,
                      String dir_poblacion, int importeCobrado, String estado, String descrp_estado) {
 
+        this.fechaServicio = fechaServicio;
         this.fechaSolicitud = fechaSolicitud;
         this.dir_calle = dir_calle;
         this.dir_num = dir_num;
@@ -72,6 +73,10 @@ public class Solicitud {
     public void setFechaSolicitud(Date fechaSolicitud) {
         this.fechaSolicitud = fechaSolicitud;
     }
+
+    public Date getFechaServicio() { return fechaServicio; }
+
+    public void setFechaServicio(Date fechaServicio) { this.fechaServicio = fechaServicio; }
 
     public String getDir_calle() {
         return dir_calle;

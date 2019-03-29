@@ -65,6 +65,7 @@ CREATE TABLE `solicitud` (
   `dir_poblacion` varchar(255) DEFAULT NULL,
   `estado` varchar(255) DEFAULT NULL,
   `fecha_solicitud` date DEFAULT NULL,
+  `fecha_servicio`  date DEFAULT NULL,
   `importe_cobrado` int(11) NOT NULL,
   `servicio_id` int(11) DEFAULT NULL,
   `usuario_id` int(11) DEFAULT NULL
@@ -74,12 +75,12 @@ CREATE TABLE `solicitud` (
 -- Volcado de datos para la tabla `solicitud`
 --
 
-INSERT INTO `solicitud` (`id_solicitud`, `descrp_estado`, `dir_calle`, `dir_num`, `dir_poblacion`, `estado`, `fecha_solicitud`, `importe_cobrado`, `servicio_id`, `usuario_id`) VALUES
-(1, '', 'Calle del Foso', '20', 'Madrid', 'PENDIENTE', '2019-02-10', 10, 1, 1),
-(2, '', 'Paseo de la Castellana', '150', 'Madrid', 'CONFIRMADA', '2019-02-20', 40, 2, 2),
-(3, '', 'Calle Totana', '10', 'Madrid', 'COMPLETADA', '2019-03-20', 40, 1, 2),
-(4, '', 'Avenida Rinoceronte', '17', 'Getafe', 'COMPLETADA', '2019-01-18', 150, 4, 6),
-(5, 'El cliente quería únicamente la reparación', 'Paseo de la Castellana', '150', 'Madrid', 'CANCELADA', '2019-02-19', 0, 3, 2);
+INSERT INTO `solicitud` (`id_solicitud`, `descrp_estado`, `dir_calle`, `dir_num`, `dir_poblacion`, `estado`, `fecha_solicitud`, `fecha_servicio`, `importe_cobrado`, `servicio_id`, `usuario_id`) VALUES
+(1, '', 'Calle del Foso', '20', 'Madrid', 'PENDIENTE', '2019-02-10','2019-02-13', 10, 1, 1),
+(2, '', 'Paseo de la Castellana', '150', 'Madrid', 'CONFIRMADA', '2019-02-20','2019-02-21', 40, 2, 2),
+(3, '', 'Calle Totana', '10', 'Madrid', 'COMPLETADA', '2019-03-20','2019-03-26', 40, 1, 2),
+(4, '', 'Avenida Rinoceronte', '17', 'Getafe', 'COMPLETADA', '2019-01-18','2019-01-20', 150, 4, 6),
+(5, 'El cliente quería únicamente la reparación', 'Paseo de la Castellana', '150', 'Madrid', 'CANCELADA', '2019-02-19','2019-02-28', 0, 3, 2);
 
 -- --------------------------------------------------------
 
