@@ -19,5 +19,7 @@ public interface UsuarioRestRepository extends CrudRepository<Usuario, Integer> 
     List<Usuario> todos_usuarios();
 
     List<Usuario> findByEmail(@Param("email")String email);
+    List<Usuario> findAllByOrderByNombreAsc();
+
 
 }

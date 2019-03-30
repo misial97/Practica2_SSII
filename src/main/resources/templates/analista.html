@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html >
+<html>
 <head>
     <!-- Site made with Mobirise Website Builder v4.9.2, https://mobirise.com -->
     <meta charset="UTF-8">
@@ -19,27 +19,207 @@
     <link rel="stylesheet" href="/theme/css/style.css">
     <link rel="stylesheet" href="/mobirise/css/mbr-additional.css" type="text/css">
     <script language="JavaScript">
-        function detalles(url){
-            localStorage.setItem('urlSer',url);
-            window.location='/analista/detallesSer';
+
+        function detalles(url) {
+            localStorage.setItem('urlSer', url);
+            window.location = '/analista/detallesSer';
 
         }
+
+        function solicitudDet(datos) {
+            if (document.getElementById(datos).getAttribute("hidden") != null) {
+                document.getElementById(datos).removeAttribute("hidden");
+            } else {
+                document.getElementById(datos).hidden = "true";
+            }
+
+
+        }
+
         function crearElemento(elemento, identificador, clase, texto, valor, ref, click, action, type) {
             var item = document.createElement(elemento);
-            if (identificador !=='__'){ item.id = identificador; }
-            if (clase !=='__') { item.className = clase; }
-            if (texto !=='__') { item.innerText = texto; }
-            if (valor !== '__') { item.value = valor; }
-            if (ref !=='__') { item.href = ref; }
-            if (click !=='__') { item.onclick = click; }
-            if (action !=='__') { item.action = action; }
-            if (type !=='__') { item.type = type; }
+            if (identificador !== '__') {
+                item.id = identificador;
+            }
+            if (clase !== '__') {
+                item.className = clase;
+            }
+            if (texto !== '__') {
+                item.innerText = texto;
+            }
+            if (valor !== '__') {
+                item.value = valor;
+            }
+            if (ref !== '__') {
+                item.href = ref;
+            }
+            if (click !== '__') {
+                item.onclick = click;
+            }
+            if (action !== '__') {
+                item.action = action;
+            }
+            if (type !== '__') {
+                item.type = type;
+            }
             return item;
         }
+
+        function profMasSol() {
+            var apartado = document.getElementById('listaElem');
+            apartado.innerText = "";
+            var profesionales = new Array();
+            var solicitudes = new Array();
+
+
+
+            $.ajax({
+                async: false,
+                url: "http://localhost:8080/usuarios/search/findAllByOrderByNombreAsc"
+            }).then(function (data) {
+                $.each(data._embedded.usuarios, function (index, value) {
+                    var numSol = 0;
+                    var nombreUsr;
+                    var cont = 0;
+                    var urlUsrServicio = value['_links']['servicios']['href'];
+
+                    nombreUsr = value['nombre'] + " " + value['apellidos'];
+                    var auxiliar;
+                    $.ajax({
+                        async: false,
+                        url: urlUsrServicio
+                    }).then(function (data1) {
+                        $.each(data1._embedded.servicios, function (ind, val) {
+                            numSol = 0;
+                            $.ajax({
+                                async: false,
+                                url: val['_links']['solicitudes']['href']
+                            }).then(function (data2) {
+                                $.each(data2._embedded.solicitudes, function (i, v) {
+                                    var fecha = v['fechaSolicitud'];
+                                    var estado = v['estado'];
+                                    var usuario;
+                                    $.ajax({
+                                        async: false,
+                                        url: v['_links']['usuario']['href']
+                                    }).then(function (data3) {
+                                        numSol++;
+                                        console.log(data3.nombre);
+                                        usuario = data3.nombre + " " + data3.apellidos;
+                                        auxiliar = fecha + "^" + nombreUsr + "^" + estado + "^" + usuario;
+                                        solicitudes.push(auxiliar);
+                                    });
+
+                                });
+
+                            });
+
+                            if (numSol > 0) {
+                                cont++;
+                            }
+                        });
+
+                    });
+                    if (cont > 0) {
+                        profesionales.push(cont + "*" + nombreUsr);
+                    }
+                });
+            });
+
+
+            function compare(a, b) {
+                var aux1 = parseInt(a.split("*", 2)[0]);
+                var aux2 = parseInt(b.split("*", 2)[0]);
+                var aux3 = (b.split("*", 2)[1]);
+                var aux4 = (b.split("*", 2)[1]);
+                var result = aux2 - aux1;
+                if (result == 0) {
+                    if (aux3 > aux4) {
+                        return -1;
+                    } else {
+                        return 1;
+                    }
+                } else {
+                    return result;
+                }
+            }
+
+            function compareFecha(a, b) {
+                var fecha1 = (a.split("^", 2)[0]);
+                var fecha2 = (b.split("^", 2)[0]);
+
+                var ano1 = (fecha1.split("-", 3)[0]);
+                var mes1 = (fecha1.split("-", 3)[1]);
+                var dia1 = (fecha1.split("-", 3)[2]);
+
+                var ano2 = (fecha2.split("-", 3)[0]);
+                var mes2 = (fecha2.split("-", 3)[1]);
+                var dia2 = (fecha2.split("-", 3)[2]);
+
+                var fechaA = parseInt(ano1 + "" + mes1 + "" + dia1);
+                var fechaB = parseInt(ano2 + "" + mes2 + "" + dia2);
+
+                return fechaA - fechaB;
+            }
+
+            profesionales.sort(compare);
+            solicitudes.sort(compareFecha);
+            console.log(solicitudes);
+
+            for (z = 0; z < profesionales.length; z++) {
+                var array = profesionales[z].split("*", 2);
+                var nombreUsr = array[1];
+                var cantidad = array[0];
+                var texto="";
+                var contenedor1 = crearElemento('div', nombreUsr, 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', '__', '__', '__', '__', 'text');
+                var contenedorSol = crearElemento('div', nombreUsr + 'solicitud', 'mbr-content-title mbr-bold mbr-fonts-style display-4', '__', '__', '__', '__', '__', 'text');
+                var espacio = crearElemento('br', '__', '__', '__', '__', '__', '__', '__', '__');
+                var contenedor2 = crearElemento('div', nombreUsr + cantidad, 'mbr-content-title mbr-bold mbr-fonts-style display-4', '__', '__', '__', '__', '__', 'text');
+                var detalles = crearElemento('a', "info", 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', 'detalles', '__', '__', '__', 'text');
+
+                contenedor1.setAttribute('style', 'background-color:#0069d9; color: white');
+                contenedor2.setAttribute('style', 'background-color:lightsteelblue; color: dimgrey');
+                contenedorSol.setAttribute('style', 'background-color:lightsteelblue; color: dimgrey; padding:10px');
+
+
+                contenedor1.setAttribute('type', 'text');
+                contenedor2.setAttribute('type', 'text');
+                contenedorSol.setAttribute('type', 'text');
+
+                contenedor1.innerText = nombreUsr;
+                contenedor2.innerText = "Nº de servicios solicitados: \n" + cantidad;
+                for(var r=0; r<solicitudes.length;r++){
+         //  fecha + "^" + nombreUsr + "^" + estado + "^" + usuario
+                    var comp= solicitudes[r].split("^",4);
+                    var fechaComp= comp[0];
+                    var nombreComp= comp[1];
+                    var estadoComp= comp[2];
+                    var usuarioCom= comp[3];
+                    if(nombreUsr===nombreComp){
+                        texto= texto+"\nFecha:       "+fechaComp+"\n   Estado:       "+estadoComp+"\nContratante:        "+usuarioCom+"\n";
+                    }
+
+                }
+                contenedorSol.setAttribute('hidden', '');
+                detalles.innerText = "Ver solicitudes...";
+                contenedorSol.innerText=texto;
+                var conta = contenedorSol.id;
+                detalles.setAttribute('onclick', 'solicitudDet(\'' + conta + '\')');
+                apartado.appendChild(contenedor1);
+                apartado.appendChild(contenedor2);
+                apartado.appendChild(contenedorSol);
+
+                apartado.appendChild(detalles);
+                apartado.appendChild(espacio);
+
+
+            }
+        }
+
+
         function serviciosMasIngresos() {
             var apartado = document.getElementById('listaElem');
-            apartado.innerText="";
-            var estatus;
+            apartado.innerText = "";
 
 
             var solicitudes = new Array();
@@ -51,7 +231,7 @@
                 $.each(data._embedded.servicios, function (index, value) {
                     var ingresos = 0;
                     var estatus;
-                    var cont=0;
+                    var cont = 0;
                     var numeroSol = value['solicitud'].length;
                     if (numeroSol > 0) {
 
@@ -67,54 +247,55 @@
                         }
                         if (cont > 0) {
 
-                        camposConcat = ingresos + "*" + value['_links']['self']['href'] + "*" + cont;
-                        solicitudes.push(camposConcat);
-                        console.log(camposConcat);
+                            camposConcat = ingresos + "*" + value['_links']['self']['href'] + "*" + cont;
+                            solicitudes.push(camposConcat);
+
+                        }
                     }
-                }
                 });
 
-                });
+            });
 
             function compare(a, b) {
-                var aux1=parseInt(a.split("*",1));
-                var aux2=parseInt(b.split("*",1));
+                var aux1 = parseInt(a.split("*", 1));
+                var aux2 = parseInt(b.split("*", 1));
                 return aux2 - aux1;
             }
+
             solicitudes.sort(compare);
 
-            for(i=0;i<solicitudes.length;i++){
-                var todo= solicitudes[i].split("*",3);
-                var urlSer=todo[1];
-                var num=todo[0];
-                var cantidad= todo[2];
+            for (i = 0; i < solicitudes.length; i++) {
+                var todo = solicitudes[i].split("*", 3);
+                var urlSer = todo[1];
+                var num = todo[0];
+                var cantidad = todo[2];
                 var nombreSer;
                 var nombreUsr;
                 $.ajax({
                     async: false,
                     url: urlSer
                 }).then(function (data1) {
-                    nombreSer= data1.name;
+                    nombreSer = data1.name;
                     console.log(data1._links.usuario.href);
                     $.ajax({
                         async: false,
                         url: data1._links.usuario.href
                     }).then(function (data2) {
-                        nombreUsr= data2.nombre+" "+data2.apellidos;
-                        var contenedor1= crearElemento('div', nombreSer, 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', '__', '__','__','__','text' );
-                        var espacio= crearElemento('br', '__', '__', '__', '__', '__','__','__','__' );
-                        var contenedor2= crearElemento('div',nombreUsr , 'mbr-content-title mbr-bold mbr-fonts-style display-4', '__', '__', '__','__','__','text' );
-                        var detalles= crearElemento('a', urlSer, 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', 'detalles', '__','__','__','text' );
+                        nombreUsr = data2.nombre + " " + data2.apellidos;
+                        var contenedor1 = crearElemento('div', nombreSer, 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', '__', '__', '__', '__', 'text');
+                        var espacio = crearElemento('br', '__', '__', '__', '__', '__', '__', '__', '__');
+                        var contenedor2 = crearElemento('div', nombreUsr, 'mbr-content-title mbr-bold mbr-fonts-style display-4', '__', '__', '__', '__', '__', 'text');
+                        var detalles = crearElemento('a', urlSer, 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', 'detalles', '__', '__', '__', 'text');
 
-                        contenedor1.setAttribute('style','background-color:#0069d9; color: white');
-                        contenedor2.setAttribute('style','background-color:lightsteelblue; color: dimgrey');
+                        contenedor1.setAttribute('style', 'background-color:#0069d9; color: white');
+                        contenedor2.setAttribute('style', 'background-color:lightsteelblue; color: dimgrey');
 
-                        contenedor1.setAttribute('type','text');
-                        contenedor2.setAttribute('type','text');
+                        contenedor1.setAttribute('type', 'text');
+                        contenedor2.setAttribute('type', 'text');
 
-                        contenedor1.innerText= nombreSer;
-                        contenedor2.innerText= "Profesional: \n"+nombreUsr+"\nImporte Cobrado: \n"+num+" €\nSolicitudes completadas: \n"+cantidad;
-                        detalles.innerText="Ver detalles...";
+                        contenedor1.innerText = nombreSer;
+                        contenedor2.innerText = "Profesional: \n" + nombreUsr + "\nNº de solicitudes completadas: \n" + cantidad + "\nImporte cobrado: \n" + num + "€";
+                        detalles.innerText = "Ver detalles...";
                         detalles.setAttribute('onclick', 'detalles(this.id)');
 
                         apartado.appendChild(contenedor1);
@@ -127,9 +308,10 @@
             }
 
         }
+
         function serviciosMasDemandados() {
             var apartado = document.getElementById('listaElem');
-            apartado.innerText="";
+            apartado.innerText = "";
 
             var solicitudes = new Array();
             var camposConcat;
@@ -139,50 +321,52 @@
             }).then(function (data) {
                 $.each(data._embedded.servicios, function (index, value) {
                     var numeroSol = value['solicitud'].length;
-                        if(numeroSol!=0){
-                            camposConcat=numeroSol+"*"+value['_links']['self']['href'];
-                            solicitudes.push(camposConcat);
-                        }
+                    if (numeroSol != 0) {
+                        camposConcat = numeroSol + "*" + value['_links']['self']['href'];
+                        solicitudes.push(camposConcat);
+                    }
                 });
             });
+
             function compare(a, b) {
-                var aux1=parseInt(a.split("*",1));
-                var aux2=parseInt(b.split("*",1));
-                    return aux2 - aux1;
+                var aux1 = parseInt(a.split("*", 1));
+                var aux2 = parseInt(b.split("*", 1));
+                return aux2 - aux1;
             }
+
             solicitudes.sort(compare);
 
-            for(i=0;i<solicitudes.length;i++){
-                var todo= solicitudes[i].split("*",2);
-                var urlSer=todo[1];
-                var num=todo[0];
+            for (i = 0; i < solicitudes.length; i++) {
+                var todo = solicitudes[i].split("*", 2);
+                var urlSer = todo[1];
+                var num = todo[0];
                 var nombreSer;
                 var nombreUsr;
                 $.ajax({
                     async: false,
                     url: urlSer
                 }).then(function (data1) {
-                    nombreSer= data1.name;
+                    nombreSer = data1.name;
                     console.log(data1._links.usuario.href);
                     $.ajax({
                         async: false,
                         url: data1._links.usuario.href
                     }).then(function (data2) {
-                        nombreUsr= data2.nombre+" "+data2.apellidos;
-                        var contenedor1= crearElemento('div', nombreSer, 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', '__', '__','__','__','text' );
-                        var espacio= crearElemento('br', '__', '__', '__', '__', '__','__','__','__' );
-                        var contenedor2= crearElemento('div',nombreUsr , 'mbr-content-title mbr-bold mbr-fonts-style display-4', '__', '__', '__','__','__','text' );
-                        var detalles= crearElemento('a', urlSer, 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', 'detalles', '__','__','__','text' );
+                        nombreUsr = data2.nombre + " " + data2.apellidos;
+                        var contenedor1 = crearElemento('div', nombreSer, 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', '__', '__', '__', '__', 'text');
+                        var espacio = crearElemento('br', '__', '__', '__', '__', '__', '__', '__', '__');
+                        var contenedor2 = crearElemento('div', nombreUsr, 'mbr-content-title mbr-bold mbr-fonts-style display-4', '__', '__', '__', '__', '__', 'text');
+                        var detalles = crearElemento('a', urlSer, 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', 'detalles', '__', '__', '__', 'text');
 
-                        contenedor1.setAttribute('style','background-color:#0069d9; color: white');
-                        contenedor2.setAttribute('style','background-color:lightsteelblue; color: dimgrey');
+                        contenedor1.setAttribute('style', 'background-color:#0069d9; color: white');
+                        contenedor2.setAttribute('style', 'background-color:lightsteelblue; color: dimgrey');
 
-                        contenedor1.setAttribute('type','text');
-                        contenedor2.setAttribute('type','text');
+                        contenedor1.setAttribute('type', 'text');
+                        contenedor2.setAttribute('type', 'text');
 
-                        contenedor1.innerText= nombreSer;
-                        contenedor2.innerText= "Profesional: \n"+nombreUsr+"\nVeces solicitado: \n"+num;
-                        detalles.innerText="Ver detalles...";
+                        contenedor1.innerText = nombreSer;
+                        contenedor2.innerText = "Profesional: \n" + nombreUsr + "\nVeces solicitado: \n" + num;
+                        detalles.innerText = "Ver detalles...";
                         detalles.setAttribute('onclick', 'detalles(this.id)');
 
                         apartado.appendChild(contenedor1);
@@ -199,7 +383,7 @@
 
         function serviciosNoUsados() {
             var apartado = document.getElementById('listaElem');
-            apartado.innerText="";
+            apartado.innerText = "";
 
             var solicitudes = new Array();
             $.ajax({
@@ -230,26 +414,26 @@
                         }
                     }
                     if (noApto) {
-                        var contenedor1= crearElemento('div', value['name'], 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', value['name'], '__','__','__','text' );
-                        var espacio= crearElemento('br', '__', '__', '__', '__', '__','__','__','__' );
+                        var contenedor1 = crearElemento('div', value['name'], 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', value['name'], '__', '__', '__', 'text');
+                        var espacio = crearElemento('br', '__', '__', '__', '__', '__', '__', '__', '__');
 
-                        var urlName= value['_links']['usuario']['href'];
+                        var urlName = value['_links']['usuario']['href'];
                         $.ajax({
-                            async:false,
+                            async: false,
                             url: urlName
-                        }).then(function(data3){
-                            var contenedor2= crearElemento('div', data3.nombre+" "+data3.apellidos, 'mbr-content-title mbr-bold mbr-fonts-style display-4', '__', data3.nombre+" "+data3.apellidos, '__','__','__','text' );
-                            contenedor1.setAttribute('style','background-color:#0069d9; color: white');
-                            contenedor2.setAttribute('style','background-color:lightsteelblue; color: dimgrey');
-                            var detalles= crearElemento('a','__', 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', 'detalles', '__','__','__','text' );
+                        }).then(function (data3) {
+                            var contenedor2 = crearElemento('div', data3.nombre + " " + data3.apellidos, 'mbr-content-title mbr-bold mbr-fonts-style display-4', '__', data3.nombre + " " + data3.apellidos, '__', '__', '__', 'text');
+                            contenedor1.setAttribute('style', 'background-color:#0069d9; color: white');
+                            contenedor2.setAttribute('style', 'background-color:lightsteelblue; color: dimgrey');
+                            var detalles = crearElemento('a', '__', 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', 'detalles', '__', '__', '__', 'text');
 
 
-                            contenedor1.setAttribute('type','text');
-                            contenedor2.setAttribute('type','text');
-                            detalles.innerText=" ";
+                            contenedor1.setAttribute('type', 'text');
+                            contenedor2.setAttribute('type', 'text');
+                            detalles.innerText = " ";
 
-                            contenedor1.innerText= value['name'];
-                            contenedor2.innerText= "Profesional: \n"+data3.nombre+" "+data3.apellidos;
+                            contenedor1.innerText = value['name'];
+                            contenedor2.innerText = "Profesional: \n" + data3.nombre + " " + data3.apellidos;
 
 
                             apartado.appendChild(contenedor1);
@@ -269,7 +453,9 @@
 <!--Cabecera pagina-->
 <section class="menu cid-rhFKKj91K6" once="menu" id="menu1-6">
     <nav class="navbar navbar-expand beta-menu navbar-dropdown align-items-center navbar-fixed-top navbar-toggleable-sm">
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
             <div class="hamburger">
                 <span></span>
                 <span></span>
@@ -281,7 +467,8 @@
             <div class="navbar-brand">
                 <span class="navbar-logo">
                     <a href="https://mobirise.co">
-                         <img src="/images/autonomo.us-logo-notype-122x122.png" alt="Mobirise" title="" style="height: 4.8rem;">
+                         <img src="/images/autonomo.us-logo-notype-122x122.png" alt="Mobirise" title=""
+                              style="height: 4.8rem;">
                     </a>
                 </span>
                 <span class="navbar-caption-wrap"><a class="navbar-caption text-white display-4" href="index.html">
@@ -296,22 +483,28 @@
 <!--Insertar codigo cuerpo de aqui hasta-->
 
 
-<section class="engine"><a href="https://mobirise.info">Mobirise</a></section><section class="header9 cid-rhFKJqD3Vr mbr-fullscreen mbr-parallax-background" id="header9-5">
+<section class="engine"><a href="https://mobirise.info">Mobirise</a></section>
+<section class="header9 cid-rhFKJqD3Vr mbr-fullscreen mbr-parallax-background" id="header9-5">
     <div class="mbr-overlay" style="opacity: 0.8; background-color: rgb(0, 0, 0);"></div>
     <div class="container">
-        <h1 id="welcome" class="mbr-section-title align-left mbr-bold pb-3 mbr-fonts-style display-1" style="padding-top: 35px"><p id="w"></p></h1>
+        <h1 id="welcome" class="mbr-section-title align-left mbr-bold pb-3 mbr-fonts-style display-1"
+            style="padding-top: 35px"><p id="w"></p></h1>
         <div class="mbr-section-btn align-left">
-            <a class="btn btn-primary display-4" style='width:400px; height:50px'  onclick="serviciosNoUsados()">Servicios no demandados</a>
-            <a class="btn btn-primary display-4" style='width:400px; height:50px' onclick="serviciosMasDemandados()">Servicios mas demandados</a>
-            <a class="btn btn-primary display-4" style='width:400px; height:50px' onclick="serviciosMasIngresos()">Servicios con mas ingresos</a>
-            <a class="btn btn-primary display-4" style='width:400px; height:50px'  href="listaPeticiones.html">Profesionales mas demandados</a>
+            <a class="btn btn-primary display-4" style='width:400px; height:50px' onclick="serviciosNoUsados()">Servicios
+                no demandados</a>
+            <a class="btn btn-primary display-4" style='width:400px; height:50px' onclick="serviciosMasDemandados()">Servicios
+                mas demandados</a>
+            <a class="btn btn-primary display-4" style='width:400px; height:50px' onclick="serviciosMasIngresos()">Servicios
+                con mas ingresos</a>
+            <a class="btn btn-primary display-4" style='width:400px; height:50px' onclick="profMasSol()">Profesionales
+                mas demandados</a>
             <br>
             <br>
             <br>
             <div class="media-container-column mbr-white">
                 <div id="listaElem">
-                    <div class="mbr-content-title mbr-bold mbr-fonts-style display-7" id="listaName" type="text" > </div>
-                    <div class="mbr-content-title mbr-bold mbr-fonts-style display-4" id="listaDesc" type="text" > </div>
+                    <div class="mbr-content-title mbr-bold mbr-fonts-style display-7" id="listaName" type="text"></div>
+                    <div class="mbr-content-title mbr-bold mbr-fonts-style display-4" id="listaDesc" type="text"></div>
                 </div>
             </div>
         </div>
@@ -357,7 +550,9 @@
             <div class="col-12 col-md-3 mbr-fonts-style display-7">
                 <h5 class="pb-3">
                     Enlaces</h5>
-                <p class="mbr-text"><a href="https://www.urjc.es/" class="text-success">Términos y condiciones de uso</a><br><a href="https://www.urjc.es/" class="text-success">Red de Autonomos</a><br><a href="https://www.urjc.es/" class="text-success">FAQs</a></p>
+                <p class="mbr-text"><a href="https://www.urjc.es/" class="text-success">Términos y condiciones de
+                    uso</a><br><a href="https://www.urjc.es/" class="text-success">Red de Autonomos</a><br><a
+                        href="https://www.urjc.es/" class="text-success">FAQs</a></p>
             </div>
         </div>
         <div class="footer-lower">
@@ -413,8 +608,8 @@
 </section>
 
 <script language="JavaScript">
-    var usuario= localStorage.getItem('usuario');
-    document.getElementById('w').innerText = "Bienvenid@ "+ usuario;
+    var usuario = localStorage.getItem('usuario');
+    document.getElementById('w').innerText = "Bienvenid@ " + usuario;
 </script>
 
 <script src="/web/assets/jquery/jquery.min.js"></script>
