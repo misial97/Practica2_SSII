@@ -29,41 +29,39 @@
     <script language="JavaScript">
         function compruebaLogin() {
             var email = $('#email').val();
-            console.log(email);
             var pass =  $('#passw').val();
-            console.log(pass);
             var btn= document.getElementById("btnlogin");
             $.ajax({
                 url: "http://localhost:8080/usuarios/search/findByEmail?email=" + email
             }).then(function(data) {
-             var name_aux =data._embedded.usuarios[0].nombre;
-             console.log(name_aux);
-             var url_aux =data._embedded.usuarios[0]._links.self.href;
-             console.log(url_aux);
-             var email_aux =data._embedded.usuarios[0].email;
-             console.log(url_aux);
-                localStorage.setItem('usuario', name_aux);
-                localStorage.setItem('usuarioJSON',url_aux);
-                localStorage.setItem('usuarioEmail',email_aux);
-                if((data._embedded.usuarios[0].pass)===(pass)){
-                    console.log("TODO OK --> LOGIN");
-                    if((data._embedded.usuarios[0].perfil)===("COSTUMER")) {
-                        console.log("TODO OK --> COSTUMER");
-                        location.href ="http://localhost:8080/buscar";
-                    }else if((data._embedded.usuarios[0].perfil)===("PROFESSIONAL")){
-                        console.log("TODO OK --> PROFESSIONAL");
-                        location.href ="http://localhost:8080/profesional";
-                    }else if((data._embedded.usuarios[0].perfil)===("ANALYIST")){
-                        console.log("TODO OK --> ANALYIST");
-                        location.href ="http://localhost:8080/analista";
-                    }else{
-                        console.error("ERROR LOG IN");
+                //variables almacenadas para usarlas más adelante
+                if(data._embedded.usuarios.length==0){
+                    alert("El usuario no existe.");
+                }else{
+                var name_aux =data._embedded.usuarios[0].nombre;
+                var url_aux =data._embedded.usuarios[0]._links.self.href;
+                var email_aux =data._embedded.usuarios[0].email;
+                    localStorage.setItem('usuario', name_aux);
+                    localStorage.setItem('usuarioJSON',url_aux);
+                    localStorage.setItem('usuarioEmail',email_aux);
+
+                    if((data._embedded.usuarios[0].pass)===(pass)){
+                        if((data._embedded.usuarios[0].perfil)===("COSTUMER")) {
+                            location.href ="http://localhost:8080/buscar";
+                        }else if((data._embedded.usuarios[0].perfil)===("PROFESSIONAL")){
+                            location.href ="http://localhost:8080/profesional";
+                        }else if((data._embedded.usuarios[0].perfil)===("ANALYIST")){
+                            location.href ="http://localhost:8080/analista";
+                        }else{
+                            alert("El usuario esta corrupto (ningún perfil válido)");
+                        }
+                    }
+                    else{
+                        alert("Revise la contraseña.");
                     }
                 }
-                else{
-                    console.log("error");
-                }
             });
+
         }
     </script>
 </head>
@@ -82,11 +80,11 @@
         <div class="menu-logo">
             <div class="navbar-brand">
                 <span class="navbar-logo">
-                    <a href="https://mobirise.co">
+                    <a href="/login">
                          <img src="/images/autonomo.us-logo-notype-122x122.png" alt="Mobirise" title="" style="height: 4.8rem;"/>
                     </a>
                 </span>
-                <span class="navbar-caption-wrap"><a class="navbar-caption text-white display-4" href="index.html">
+                <span class="navbar-caption-wrap"><a class="navbar-caption text-white display-4" href="#">
                         AUTONOMOS NETWORK</a></span>
             </div>
         </div>
@@ -95,7 +93,7 @@
     </nav>
 </section>
 
-<section class="engine"><a href="https://mobirise.info/b">how to create your own site</a></section><section class="cid-qTkA127IK8 mbr-fullscreen mbr-parallax-background" id="header2-1">
+<section class="engine"><a href="https://mobirise.info/b">how to create your own site</a></section><section class="header9 cid-rhFKJqD3Vr mbr-fullscreen mbr-parallax-background" id="header9-5">
 
     <div class="mbr-overlay" style="opacity: 0.8; background-color: rgb(0, 0, 0);">
     </div>
@@ -106,16 +104,12 @@
                     <h1 class="mbr-section-title align-left mbr-bold pb-3 mbr-fonts-style display-1"><p><br></br>Bienvenido a Autonomos Network</p></h1>
                       <div class="mbr-section-btn align-left">
                           <form id="login" action="javascript:compruebaLogin();">
-                                <input class="form-control" type="text" name="text" placeholder="E-mail" data-form-field="mailito" required="" id="email"/>
+                                <input class="form-control" type="text" name="text" placeholder="E-mail" data-form-field="mailito" required="required" id="email"/>
                                 <p></br></br></p>
-                                <input class="form-control" type="text" name="text" placeholder="Contraseña" data-form-field="pass" required="" id="passw"/>
+                                <input class="form-control" type="password" name="text" placeholder="Contraseña" data-form-field="password" required="required" id="passw"/>
                                 </br></br>
-                              <!--<a class="btn btn-primary display-4" id="loginProf" href="">Log-in Autonomo</a>-->
-                             <input id="btnlogin" type="submit" class="btn btn-primary display-4"  value="Hola buenos dias" />
-
+                             <input id="btnlogin" type="submit" class="btn btn-primary display-4"  value="Log-in" />
                           </form>
-
-
                       </div>
                 </div>
 
@@ -128,7 +122,7 @@
         <div class="media-container-row content text-white">
             <div class="col-12 col-md-3">
                 <div class="media-wrap">
-                    <a href="https://mobirise.co/">
+                    <a href="#">
                         <img src="/images/autonomo.us-logo-notype-122x122.png" alt="Mobirise" title=""/>
                     </a>
                 </div>
