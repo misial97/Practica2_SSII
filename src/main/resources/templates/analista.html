@@ -22,7 +22,9 @@
 
         function detalles(url) {
             localStorage.setItem('urlSer', url);
-            window.location = '/analista/detallesSer';
+           // window.location = '/analista/detallesSer';
+            window.open("/analista/detallesSer", "Diseño Web", "width=900, height=900")
+
 
         }
 
@@ -104,7 +106,6 @@
                                         url: v['_links']['usuario']['href']
                                     }).then(function (data3) {
                                         numSol++;
-                                        console.log(data3.nombre);
                                         usuario = data3.nombre + " " + data3.apellidos;
                                         auxiliar = fecha + "^" + nombreUsr + "^" + estado + "^" + usuario;
                                         solicitudes.push(auxiliar);
@@ -164,7 +165,6 @@
 
             profesionales.sort(compare);
             solicitudes.sort(compareFecha);
-            console.log(solicitudes);
 
             for (z = 0; z < profesionales.length; z++) {
                 var array = profesionales[z].split("*", 2);
@@ -242,8 +242,6 @@
                             if (estado === 'COMPLETADA') {
                                 ingresos = parseInt(valor) + ingresos;
                                 cont++;
-                                console.log(ingresos);
-                                console.log(estado);
                             }
 
 
@@ -282,7 +280,6 @@
                     url: urlSer
                 }).then(function (data1) {
                     nombreSer = data1.name;
-                    console.log(data1._links.usuario.href);
                     $.ajax({
                         async: false,
                         url: data1._links.usuario.href
@@ -363,7 +360,6 @@
                     url: urlSer
                 }).then(function (data1) {
                     nombreSer = data1.name;
-                    console.log(data1._links.usuario.href);
                     $.ajax({
                         async: false,
                         url: data1._links.usuario.href
@@ -503,9 +499,9 @@
 <section class="header9 cid-rhFKJqD3Vr mbr-fullscreen mbr-parallax-background" id="header9-5">
     <div class="mbr-overlay" style="opacity: 0.8; background-color: rgb(0, 0, 0);"></div>
     <div class="container">
-        <h1 id="welcome" class="mbr-section-title align-left mbr-bold pb-3 mbr-fonts-style display-1"
+        <h1 id="welcome" class="mbr-section-title align-center mbr-bold pb-3 mbr-fonts-style display-1"
             style="padding-top: 35px"><p id="w"></p></h1>
-        <div class="mbr-section-btn align-left">
+        <div class="mbr-section-btn align-center">
             <a class="btn btn-primary display-4" style='width:400px; height:50px' onclick="serviciosNoUsados()">Servicios
                 no demandados</a>
             <a class="btn btn-primary display-4" style='width:400px; height:50px' onclick="serviciosMasDemandados()">Servicios
@@ -517,7 +513,7 @@
             <br>
             <br>
             <br>
-            <div class="media-container-column mbr-white">
+            <div class="media-container-column mbr-white align-left">
                 <div id="listaElem">
                     <div class="mbr-content-title mbr-bold mbr-fonts-style display-7" id="listaName" type="text"></div>
                     <div class="mbr-content-title mbr-bold mbr-fonts-style display-4" id="listaDesc" type="text"></div>
