@@ -170,16 +170,16 @@
                 var array = profesionales[z].split("*", 2);
                 var nombreUsr = array[1];
                 var cantidad = array[0];
-                var texto="";
+                var texto="Solicitudes: \n\n";
                 var contenedor1 = crearElemento('div', nombreUsr, 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', '__', '__', '__', '__', 'text');
                 var contenedorSol = crearElemento('div', nombreUsr + 'solicitud', 'mbr-content-title mbr-bold mbr-fonts-style display-4', '__', '__', '__', '__', '__', 'text');
                 var espacio = crearElemento('br', '__', '__', '__', '__', '__', '__', '__', '__');
                 var contenedor2 = crearElemento('div', nombreUsr + cantidad, 'mbr-content-title mbr-bold mbr-fonts-style display-4', '__', '__', '__', '__', '__', 'text');
                 var detalles = crearElemento('a', "info", 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', 'detalles', '__', '__', '__', 'text');
 
-                contenedor1.setAttribute('style', 'background-color:#0069d9; color: white');
-                contenedor2.setAttribute('style', 'background-color:lightsteelblue; color: dimgrey');
-                contenedorSol.setAttribute('style', 'background-color:lightsteelblue; color: dimgrey; padding:10px');
+                contenedor1.setAttribute('style', 'background-color:#0069d9; color: white ; padding:10px; margin-top:10px;');
+                contenedor2.setAttribute('style', 'background-color:lightsteelblue; color: dimgrey; padding:10px; border: #0069d9 3px solid;');
+                contenedorSol.setAttribute('style', 'background-color:lightsteelblue; color: dimgrey; padding:10px; border: #0069d9 3px solid;');
 
 
                 contenedor1.setAttribute('type', 'text');
@@ -196,7 +196,7 @@
                     var estadoComp= comp[2];
                     var usuarioCom= comp[3];
                     if(nombreUsr===nombreComp){
-                        texto= texto+"\nFecha:       "+fechaComp+"\n   Estado:       "+estadoComp+"\nContratante:        "+usuarioCom+"\n";
+                        texto= texto+"Fecha:       "+fechaComp+"\n   Estado:       "+estadoComp+"\nContratante:        "+usuarioCom+"\n\n";
                     }
 
                 }
@@ -232,26 +232,32 @@
                     var ingresos = 0;
                     var estatus;
                     var cont = 0;
-                    var numeroSol = value['solicitud'].length;
-                    if (numeroSol > 0) {
-
-                        for (x = 0; x < numeroSol; x++) {
-                            estatus = value['solicitud'][x]['estado'];
-                            if (estatus === 'COMPLETADA') {
-                                ingresos = value['solicitud'][x]['importeCobrado'] + ingresos;
+                    $.ajax({
+                        async: false,
+                        url: value['_links']['solicitudes']['href']
+                    }).then(function (data2) {
+                        $.each(data2._embedded.solicitudes, function (i, v) {
+                            var valor = v['importeCobrado'];
+                            var estado = v['estado'];
+                            if (estado === 'COMPLETADA') {
+                                ingresos = parseInt(valor) + ingresos;
                                 cont++;
                                 console.log(ingresos);
-                                console.log(estatus);
-
+                                console.log(estado);
                             }
-                        }
+
+
+                        });
+
+                    });
+
                         if (cont > 0) {
 
                             camposConcat = ingresos + "*" + value['_links']['self']['href'] + "*" + cont;
                             solicitudes.push(camposConcat);
 
                         }
-                    }
+
                 });
 
             });
@@ -287,8 +293,8 @@
                         var contenedor2 = crearElemento('div', nombreUsr, 'mbr-content-title mbr-bold mbr-fonts-style display-4', '__', '__', '__', '__', '__', 'text');
                         var detalles = crearElemento('a', urlSer, 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', 'detalles', '__', '__', '__', 'text');
 
-                        contenedor1.setAttribute('style', 'background-color:#0069d9; color: white');
-                        contenedor2.setAttribute('style', 'background-color:lightsteelblue; color: dimgrey');
+                        contenedor1.setAttribute('style', 'background-color:#0069d9; color: white ; padding:10px; margin-top:10px;');
+                        contenedor2.setAttribute('style', 'background-color:lightsteelblue; color: dimgrey; padding:10px; border: #0069d9 3px solid;');
 
                         contenedor1.setAttribute('type', 'text');
                         contenedor2.setAttribute('type', 'text');
@@ -320,7 +326,17 @@
                 url: "http://localhost:8080/servicios/search/findAllByOrderByNameAsc"
             }).then(function (data) {
                 $.each(data._embedded.servicios, function (index, value) {
-                    var numeroSol = value['solicitud'].length;
+                    var numeroSol=0;
+                    $.ajax({
+                        async: false,
+                        url: value['_links']['solicitudes']['href']
+                    }).then(function (data2) {
+                        $.each(data2._embedded.solicitudes, function (i, v) {
+                            numeroSol++;
+
+                        });
+
+                    });
                     if (numeroSol != 0) {
                         camposConcat = numeroSol + "*" + value['_links']['self']['href'];
                         solicitudes.push(camposConcat);
@@ -358,8 +374,8 @@
                         var contenedor2 = crearElemento('div', nombreUsr, 'mbr-content-title mbr-bold mbr-fonts-style display-4', '__', '__', '__', '__', '__', 'text');
                         var detalles = crearElemento('a', urlSer, 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', 'detalles', '__', '__', '__', 'text');
 
-                        contenedor1.setAttribute('style', 'background-color:#0069d9; color: white');
-                        contenedor2.setAttribute('style', 'background-color:lightsteelblue; color: dimgrey');
+                        contenedor1.setAttribute('style', 'background-color:#0069d9; color: white ; padding:10px; margin-top:10px;');
+                        contenedor2.setAttribute('style', 'background-color:lightsteelblue; color: dimgrey; padding:10px; border: #0069d9 3px solid;');
 
                         contenedor1.setAttribute('type', 'text');
                         contenedor2.setAttribute('type', 'text');
@@ -423,8 +439,8 @@
                             url: urlName
                         }).then(function (data3) {
                             var contenedor2 = crearElemento('div', data3.nombre + " " + data3.apellidos, 'mbr-content-title mbr-bold mbr-fonts-style display-4', '__', data3.nombre + " " + data3.apellidos, '__', '__', '__', 'text');
-                            contenedor1.setAttribute('style', 'background-color:#0069d9; color: white');
-                            contenedor2.setAttribute('style', 'background-color:lightsteelblue; color: dimgrey');
+                            contenedor1.setAttribute('style', 'background-color:#0069d9; color: white ; padding:10px; margin-top:10px;');
+                            contenedor2.setAttribute('style', 'background-color:lightsteelblue; color: dimgrey; padding:10px; border: #0069d9 3px solid;');
                             var detalles = crearElemento('a', '__', 'mbr-content-title mbr-bold mbr-fonts-style display-7', '__', 'detalles', '__', '__', '__', 'text');
 
 
