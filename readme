@@ -1,9 +1,0 @@
-el commit anterior, es la inclusión de todos los estaticos,
-las rutas solo estan correctas en el index.html, en el resto hay que cambiarlas, pero creo que tengo una cosa
-para hacerlo mas ameno,
-
-el indexFuncionalidades.html es el antiguo index, se encuentran ahi todas las funcionalidades
-
-en el index.html actual, hay una funcion de log-in pero no he sido capaz de hacer que funcione, creo que el problema
-esta en el boton, ya que la llamada la realiza correctamente, seguramente que en lo del año pasado haya algo parecido
-

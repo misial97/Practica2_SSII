@@ -22,10 +22,7 @@
 
         function detalles(url) {
             localStorage.setItem('urlSer', url);
-           // window.location = '/analista/detallesSer';
             window.open("/analista/detallesSer", "Diseño Web", "width=900, height=900")
-
-
         }
 
         function solicitudDet(datos) {
@@ -403,7 +400,6 @@
                 url: "http://localhost:8080/solicitudes/search/findAllBy"
             }).then(function (data1) {
                 $.each(data1._embedded.solicitudes, function (index, value) {
-                    sida = false;
                     var aux = value['_links']['servicio']['href'];
                     $.ajax({
                         async: false,
@@ -462,7 +458,6 @@
     </script>
 </head>
 <body>
-<!--Cabecera pagina-->
 <section class="menu cid-rhFKKj91K6" once="menu" id="menu1-6">
     <nav class="navbar navbar-expand beta-menu navbar-dropdown align-items-center navbar-fixed-top navbar-toggleable-sm">
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
@@ -492,7 +487,6 @@
     </nav>
 </section>
 
-<!--Insertar codigo cuerpo de aqui hasta-->
 
 
 <section class="engine"><a href="https://mobirise.info">Mobirise</a></section>
@@ -505,11 +499,11 @@
             <a class="btn btn-primary display-4" style='width:400px; height:50px' onclick="serviciosNoUsados()">Servicios
                 no demandados</a>
             <a class="btn btn-primary display-4" style='width:400px; height:50px' onclick="serviciosMasDemandados()">Servicios
-                mas demandados</a>
+                más demandados</a>
             <a class="btn btn-primary display-4" style='width:400px; height:50px' onclick="serviciosMasIngresos()">Servicios
-                con mas ingresos</a>
+                con más ingresos</a>
             <a class="btn btn-primary display-4" style='width:400px; height:50px' onclick="profMasSol()">Profesionales
-                mas demandados</a>
+                más demandados</a>
             <br>
             <br>
             <br>
@@ -532,7 +526,6 @@
     <br><br><br>
     <br><br><br>
 </section>
-<!--Aqui-->
 
 
 <!--Pie de la página-->

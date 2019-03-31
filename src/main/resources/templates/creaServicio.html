@@ -21,22 +21,15 @@
     <script language="JavaScript">
 
     function addServicio() {
-            // Primero se captan los datos del formulario y pasan a un objeto.
         var confirmacion = confirm("Se va a crear un nuevo servicio");
         if (confirmacion == true){
             var urlUsuarioLogado = localStorage.getItem('usuarioJSON');
-            //alert("UsuarioLogado = "+localStorage.getItem('usuario'));
-            //alert("idUsuarioLogado = " + urlUsuarioLogado);
             var formData = {};
-            /*private String name, category, description;
-            private int hours, price;
-            private Usuario usuario;*/
             formData['name'] = $('#addName').val();
             formData['category'] = $('#addCat').val();
             formData['description'] = $('#addDes').val();
             formData['hours'] = $('#addHours').val();
             formData['price'] = $('#addPrice').val();
-            // Para el usuario hay que enviar la URI completa al objeto existente:
             formData['usuario'] = urlUsuarioLogado;
             $.ajax({
                 type: "POST",
@@ -100,15 +93,15 @@
 
         <div id="introducir">
             <form id="nuevoserv" action="javascript:addServicio();">
-                Nombre:&nbsp;<input name="addName" id="addName" type="text"/>
+                Nombre:&nbsp;<input name="addName" id="addName" type="text" required="required"/>
                 <br><br>
-                Categoría:&nbsp;<input name="addCat" id="addCat" type="text"/>
+                Categoría:&nbsp;<input name="addCat" id="addCat" type="text"required="required"/>
                 <br><br>
-                Descripción:&nbsp;<input name="addDes" id="addDes" type="text" style="width:800px;"/>
+                Descripción:&nbsp;<input name="addDes" id="addDes" type="text" style="width:800px;" required="required"/>
                 <br><br>
-                Horas:&nbsp;<input name="addHours" id="addHours" type="number"/>
+                Horas:&nbsp;<input name="addHours" id="addHours" type="number" required="required"/>
                 <br><br>
-                Precio:&nbsp;<input name="addPrice" id="addPrice" type="number"/> €
+                Precio:&nbsp;<input name="addPrice" id="addPrice" type="number" required="required"/> €
                 <br><br>
                 <div class="card px-3 align-center">
                     <br><br><br>
@@ -121,7 +114,6 @@
     </div>
 </section>
 
-<!--Aqui-->
 
 
   <!--Pie de la página-->

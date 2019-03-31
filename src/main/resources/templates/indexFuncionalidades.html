@@ -8,7 +8,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script language="JavaScript">
         var idSer;
-        // Función para obtener una película a partir de un ID (índice de la lista en memoria)
         function getUsuarioById() {
             var id = $('#iduser').val();
             $.ajax({
@@ -61,11 +60,9 @@
                 $('.sol-Catserv').append(dataService.category);
             });
         }
-        //https://stackoverflow.com/questions/10401034/create-a-label-using-jquery-on-the-fly
         function getServicioByName() {
             var name = $('#ser-form').val();
             var btn;
-           // $('.ser-n').text('');
             $('.ser-c').text('');
             $.ajax({
                 url: "http://localhost:8080/servicios/search/findByNameContains?name=" + name
@@ -80,8 +77,6 @@
                     aux= value['_links']['self']['href'];
                     btn.setAttribute('onClick','window.location='+'\''+ aux+'\'');
 
-                    // $('.ser-n').append(value['name']+"<br/>");
-                    //$('.ser-c').append(value['category']+"<br/>");
                 });
             });
             function crearElemento(elemento, identificador, clase, texto, valor, ref) {
@@ -95,17 +90,12 @@
             }
         }
         function addServicio() {
-            // Primero se captan los datos del formulario y pasan a un objeto.
             var formData = {};
-            /*    private String name, category, description;
-            private int hours, price;
-            private Usuario usuario;*/
             formData['name'] = $('#addName').val();
             formData['category'] = $('#addCat').val();
             formData['description'] = $('#addDes').val();
             formData['hours'] = $('#addHours').val();
             formData['price'] = $('#addPrice').val();
-            // Para el usuario hay que enviar la URI completa al objeto existente:
             formData['usuario'] = 'http://localhost:8080/usuarios/'+$('#addUser').val();
             $.ajax({
                 type: "POST",
@@ -116,12 +106,10 @@
                 data: JSON.stringify(formData),
                 contentType: 'application/json'
             });
-            //habría que mostrar el id del servicio creado por pantalla para que el usuario lo sepa
         }
         function borrarServicio() {
             var formData = {};
             formData['id'] = 'http://localhost:8080/servicios/'+$('#servicioId').val();
-            // Para el director hay que enviar la URI completa al objeto existente:
             $.ajax({
                 type: "DELETE",
                 url: 'http://localhost:8080/servicios/'+$('#servicioId').val(),
@@ -131,10 +119,8 @@
                 data: JSON.stringify(formData),
                 contentType: 'application/json'
             });
-
-            //hay que tener en cuenta que solo podrán borrar los servicios del propio usuario
-            //(añadir condiciones para el borrado o hacer que muestre sus servicios y que elija cual borrar)
         }
+
         function muestraServicio() {
             idSer = $('#id').val();
             var atri;
@@ -154,16 +140,12 @@
             });
         }
         function modifServicio() {
-            // Primero se captan los datos del formulario y pasan a un objeto.
             var formData = {};
             formData['name'] = $('#modifName').val();
             formData['category'] = $('#modifCat').val();
             formData['description'] = $('#modifDes').val();
             formData['hours'] = $('#modifHours').val();
             formData['price'] = $('#modifPrice').val();
-            //formData['idService'] = $('#id').val();
-            // Para el usuario hay que enviar la URI completa al objeto existente:
-            //formData['usuario'] = 'http://localhost:8080/servicios/' + $('#id').val();
             $.ajax({
                 type: "PUT",
                 url: 'http://localhost:8080/servicios/' + idSer,

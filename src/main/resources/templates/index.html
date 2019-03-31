@@ -34,7 +34,7 @@
             $.ajax({
                 url: "http://localhost:8080/usuarios/search/findByEmail?email=" + email
             }).then(function(data) {
-                //variables almacenadas para usarlas más adelante
+                //variables almacenadas para usarlas más adelante (simulacion cookie)
                 if(data._embedded.usuarios.length==0){
                     alert("El usuario no existe.");
                 }else{
@@ -47,7 +47,7 @@
 
                     if((data._embedded.usuarios[0].pass)===(pass)){
                         if((data._embedded.usuarios[0].perfil)===("COSTUMER")) {
-                            location.href ="http://localhost:8080/buscar";
+                            location.href ="http://localhost:8080/cliente";
                         }else if((data._embedded.usuarios[0].perfil)===("PROFESSIONAL")){
                             location.href ="http://localhost:8080/profesional";
                         }else if((data._embedded.usuarios[0].perfil)===("ANALYIST")){

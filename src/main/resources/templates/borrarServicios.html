@@ -35,13 +35,11 @@
             if(confirmacion){
                 var formData = {};
                 formData['id'] = urlBorrar;
-                // Para el director hay que enviar la URI completa al objeto existente:
                 $.ajax({
                     type: "DELETE",
                     url: urlBorrar,
                     dataType: 'json',
                     async: false,
-                    // El objeto hay que convertirlo a texto
                     data: JSON.stringify(formData),
                     contentType: 'application/json'
                 });
@@ -110,7 +108,6 @@
 
  </section>
 
- <!--Aqui-->
 
 
   <!--Pie de la página-->

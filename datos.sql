@@ -88,13 +88,14 @@ INSERT INTO `solicitud` (`id_solicitud`, `descrp_estado`, `dir_calle`, `dir_num`
 (4, '', 'Avenida Rinoceronte', '17', 'Getafe', 'COMPLETADA', '2019-01-18', '2019-01-20', 150, 4, 6),
 (5, 'El cliente quería únicamente la reparación', 'Paseo de la Castellana', '150', 'Madrid', 'CANCELADA', '2019-02-19', NULL, 0, 3, 2),
 (6, '', 'Calle Gobernador', '17', 'Getafe', 'COMPLETADA', '2019-03-20', '2019-03-29', 40, 10, 1),
-(7, '', 'Avenida Andalucía', '20', 'Val', 'COMPLETADA', '2019-02-01', '2019-02-05', 40, 10, 2),
+(7, '', 'Avenida Andalucía', '20', 'Valdemoro', 'COMPLETADA', '2019-02-01', '2019-02-05', 40, 10, 2),
 (8, '', 'Calle Botoneras', '150', 'Getafe', 'PENDIENTE', '2019-03-15', NULL, 20, 12, 1),
 (9, '', 'Calle de la Libertad', '147', 'Getafe', 'COMPLETADA', '2019-01-18', '2019-01-27', 20, 12, 2),
 (10, 'Cancelación pedido', 'Calle Río Cuervo', '40', 'Getafe', 'CANCELADA', '2019-01-18', NULL, 0, 12, 8),
 (11, '', 'Calle Moreras', '12', 'Getafe', 'COMPLETADA', '2019-01-19', '2019-01-20', 20, 12, 10),
-(12, '', 'Paseo de la estación', '92', 'Getafe', 'COMPLETADA', '2019-03-19', '2019-03-20', 30, 11, 8),
-(13, '', 'Calle Hermanos López', '80', 'Getafe', 'COMPLETADA', '2019-03-20', '2019-03-21', 30, 11, 10);
+(12, '', 'Paseo de la estación', '92', 'Pinto', 'COMPLETADA', '2019-03-19', '2019-03-20', 30, 11, 8),
+(13, '', 'Calle Hermanos López', '80', 'Ciempozuelos', 'COMPLETADA', '2019-03-20', '2019-03-21', 30, 11, 10),
+(14, '', 'Calle Carretas', '57', 'Madrid', 'CONFIRMADA', '2019-03-20', '2019-03-30', 145, 6, 1);
 
 -- --------------------------------------------------------
 

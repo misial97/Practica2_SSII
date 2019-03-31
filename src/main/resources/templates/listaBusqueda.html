@@ -20,9 +20,6 @@
   <link rel="stylesheet" href="/mobirise/css/mbr-additional.css" type="text/css"/>
 
     <script language="JavaScript">
-      //var urlServicio = "";
-
-
       function ocultaMuestra(urlServicioSelected){
           var divBusq1 = document.getElementById('divBus1');
           var divBusq2 = document.getElementById('muestraLista');
@@ -37,6 +34,7 @@
           seccionMuestraServicio.setAttribute('style','display:block');
           getServicio(urlServicioSelected);
       }
+
       function getServicio(urlServicio) {
           var atri;
           $.ajax({
@@ -141,15 +139,12 @@
 <section class="counters3 counters cid-ri3GCVuT85">
     <div class="container pt-4 mt-2">
 		<br><br><br>
-		<br><br><br>
         <div id="divBus1" class="container" style="display:block">
             <div class="media-container-column mbr-white">
                 <h1 class="mbr-section-title align-left mbr-bold pb-3 mbr-fonts-style display-1" style="color:gray"><p>Busqueda de Servicio</p></h1>
                 <div class="mbr-section-btn align-left">
                     <form action="javascript:getServicioByName();">
                     <input class="form-control" type="text" value=""placeholder="Busque el servicio deseado en el buscador"  required="" id="service-form3-8">
-                    <p></br></br></p>
-
                     <a class="btn btn-primary display-4" type="submit" onclick="javascript:getServicioByName();" >Buscar</a>
                     </form>>
                 </div>
@@ -237,13 +232,7 @@
                               </div>
                           </div>
                       </div>
-                      <p><br></br><br></br><br></br></p>
-                      <div class="mbr-arrow hidden-sm-down" aria-hidden="true">
-                          <a href="#next">
-                              <i class="mbri-down mbr-iconfont"></i>
-                          </a>
-                      </div>
-
+                      <p><br><br><br></p>
 
                     </div>
                   </form>

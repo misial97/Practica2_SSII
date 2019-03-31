@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html >
+<html>
 <head>
     <!-- Realizado por : Miguel Sierra y Rubén Domínguez-->
   <meta charset="UTF-8">
@@ -43,16 +43,12 @@
                 url: "http://localhost:8080/solicitudes/search/findAllBy"
             }).then(function (data1) {
                 $.each(data1._embedded.solicitudes, function (index, value) {
-                    sida = false;
                     var aux = value['_links']['servicio']['href'];
                     $.ajax({
                         async: false,
                         url: aux
                     }).then(function (data) {
                         solicitudes.push(data.name);
-
-
-
                     });
                 });
             });
@@ -98,8 +94,6 @@
                         }
                     });
                 });
-           // }
-
         }
 
 
@@ -140,7 +134,6 @@
     </nav>
 </section>
 
-<!--Insertar codigo cuerpo de aqui hasta-->
 
     <section class="engine"><a href="https://mobirise.info">Mobirise</a></section><section class="header9 cid-rhFKJqD3Vr mbr-fullscreen mbr-parallax-background" id="header9-5">
         <div class="mbr-overlay" style="opacity: 0.8; background-color: rgb(0, 0, 0);"></div>
@@ -172,7 +165,6 @@
         <br><br><br>
         <br><br><br>
     </section>
-<!--Aqui-->
 
 
 <!--Pie de la página-->
