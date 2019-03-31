@@ -1,5 +1,7 @@
 
 
 Práctica realizada por:
-  * Rubén Domínguez Perelló ()
+
+  * Rubén Domínguez Perelló (04866609Q)
+
   * Miguel Sierra Alonso (02578468F)
